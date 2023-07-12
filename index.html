@@ -16,7 +16,7 @@
     <div class="container mx-auto p-4">
         <h1 class="text-3xl font-bold mb-4">Travel Planner</h1>
 
-        <form>
+        <form id="locationForm">
             <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="destination">Destination:</label>
                 <input
@@ -30,13 +30,13 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="departure-date" type="date">
             </div>
-
-            <div class="mb-4">
+            
+            <!-- <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="return-date">Return Date:</label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="return-date" type="date">
-            </div>
+            </div> -->
 
             <div class="flex justify-center">
                 <button
@@ -44,11 +44,17 @@
                     type="submit">Plan My Trip</button>
             </div>
         </form>
+        <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            id="flightPage" href="flight.html">Flight Search</button>
+        <div id="result"></div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.9/dayjs.min.js"></script>
-
+    <!-- Include the Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNR24Q47xxypa3tPgNpbXizQZgDCr7TO8&callback=initMap"
+        async defer></script>
     <script src="./assets/js/script.js"></script>
 </body>
 
