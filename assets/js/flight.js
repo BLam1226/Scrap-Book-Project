@@ -12,17 +12,17 @@ async function retrieveStoredData() {
   if (currentLocation && destination && departureDate && destinationLocation) {
     // Display the stored data (optional)
     const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = `
-      <p>Current Location:</p>
-      <p>Latitude: ${currentLocation.lat}</p>
-      <p>Longitude: ${currentLocation.lng}</p>
-      <p>Destination: ${destination}</p>
-      <p>Destination Latitude: ${destinationLocation.lat}</p>
-      <p>Destination Longitude: ${destinationLocation.lng}</p>
-      <p>Departure Date: ${departureDate}</p>
-      <p>Current Location IATA: ${currentIataCode}</p>
-      <p>Destination Location IATA: ${destinationIataCode}</p>
-    `;
+    // resultDiv.innerHTML = `
+    //   <p>Current Location:</p>
+    //   <p>Latitude: ${currentLocation.lat}</p>
+    //   <p>Longitude: ${currentLocation.lng}</p>
+    //   <p>Destination: ${destination}</p>
+    //   <p>Destination Latitude: ${destinationLocation.lat}</p>
+    //   <p>Destination Longitude: ${destinationLocation.lng}</p>
+    //   <p>Departure Date: ${departureDate}</p>
+    //   <p>Current Location IATA: ${currentIataCode}</p>
+    //   <p>Destination Location IATA: ${destinationIataCode}</p>
+    // `;
 
     try {
       // Call the searchFlightPriceOffers function and await the result
@@ -92,7 +92,7 @@ function processFlightPriceOffers(data) {
   const uniqueOffers = {}; // Object to store unique flight offers
 
   if (data.data && data.data.length > 0) {
-    resultDiv.innerHTML = '<h2 class="text-2xl font-bold">Flight Price Offers:</h2>';
+    resultDiv.innerHTML = '<h2 class="underline text-3xl">Flight Price Offers:</h2>';
     data.data.forEach((offer) => {
       // Check if the offer price is not already stored
       if (!uniqueOffers[offer.price.total]) {
@@ -103,8 +103,8 @@ function processFlightPriceOffers(data) {
           offer.itineraries[0].segments[offer.itineraries[0].segments.length - 1].arrival.terminal;
 
         resultDiv.innerHTML += `
-          <div class="my-4 p-4 border border-gray-300 rounded">
-            <p class="text-lg font-semibold">Price: ${offer.price.total}</p>
+          <div class="card-offers my-4 p-4 border border-black rounded shadow">
+            <p class="text-lg font-semibold">Price: ${offer.price.total} USD</p>
             <p class="text-gray-600">Airline: ${offer.itineraries[0].segments[0].carrierCode}</p>
             <p class="text-gray-600">Departure Terminal: ${departureTerminal}</p>
             <p class="text-gray-600">Arrival Terminal: ${arrivalTerminal}</p>

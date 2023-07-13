@@ -59,15 +59,15 @@ function processLocationData(currentLocation, destination, departureDate) {
 
                 // Display the result on the page
                 const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = `
-                    <p>Current Location:</p>
-                    <p>Latitude: ${currentLocation.lat}</p>
-                    <p>Longitude: ${currentLocation.lng}</p>
-                    <p>Destination: ${destination}</p>
-                    <p>Destination Latitude: ${destinationLocation.lat}</p>
-                    <p>Destination Longitude: ${destinationLocation.lng}</p>
-                    <p>Departure Date: ${departureDate}</p>
-                `;
+                // resultDiv.innerHTML = `
+                //     <p>Current Location:</p>
+                //     <p>Latitude: ${currentLocation.lat}</p>
+                //     <p>Longitude: ${currentLocation.lng}</p>
+                //     <p>Destination: ${destination}</p>
+                //     <p>Destination Latitude: ${destinationLocation.lat}</p>
+                //     <p>Destination Longitude: ${destinationLocation.lng}</p>
+                //     <p>Departure Date: ${departureDate}</p>
+                // `;
 
                 // Use the Amadeus Location API to get IATA code for current location
                 const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
@@ -98,7 +98,7 @@ function processLocationData(currentLocation, destination, departureDate) {
                                     const iataCodes = data.data.map(airport => airport.iataCode);
                                     const selectOptions = iataCodes.map(iataCode => `<option value="${iataCode}">${iataCode}</option>`).join('');
                                     resultDiv.innerHTML += `
-                                        <p>Select Current Location IATA Code:</p>
+                                        <p>Select Which Airport You Would Like To Use:</p>
                                         <select id="currentIataCodeSelect">
                                             ${selectOptions}
                                         </select>
@@ -129,7 +129,7 @@ function processLocationData(currentLocation, destination, departureDate) {
                             .then(data => {
                                 if (data.data.length > 0) {
                                     const destinationIataCode = data.data[0].iataCode;
-                                    resultDiv.innerHTML += `<p>Destination IATA Code: ${destinationIataCode}</p>`;
+                                    // resultDiv.innerHTML += `<p>Destination IATA Code: ${destinationIataCode}</p>`;
 
                                     // Save destination location IATA code in local storage
                                     localStorage.setItem('destinationIataCode', destinationIataCode);
