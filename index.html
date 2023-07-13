@@ -14,7 +14,11 @@
 
 <body>
     <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold mb-4">Travel Planner</h1>
+        <h1 class="text-3xl font-bold mb-4 text-center">
+            <span class="underline text-violet text-violet-font border-4 py-2 px-4 inline-block shadow bg-gray-300">
+                Travel Planner
+            </span>
+        </h1>
 
         <form id="locationForm">
             <div class="mb-4">
@@ -30,7 +34,7 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="departure-date" type="date">
             </div>
-            
+
             <!-- <div class="mb-4">
                 <label class="block text-sm font-bold mb-2" for="return-date">Return Date:</label>
                 <input
@@ -45,9 +49,13 @@
             </div>
         </form>
         <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
             id="flightPage" href="flight.html">Flight Search</button>
         <div id="result"></div>
+        <!-- Added airplane taking off image -->
+        <div class="flex justify-center">
+            <img src="./assets/images/plane-take-off-feat.jpg" alt="airplane taking off" class="max-w-full">
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
