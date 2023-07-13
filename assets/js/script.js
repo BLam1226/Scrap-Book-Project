@@ -1,6 +1,5 @@
 // Initialize the Google Maps API
 function initMap() {
-    // Add your Google Maps API code here (if needed)
 }
 
 // Function to handle form submission
@@ -85,9 +84,9 @@ function processLocationData(currentLocation, destination, departureDate) {
                     .then(response => response.json())
                     .then(data => {
                         const accessToken = data.access_token;
-                        const amadeusEndpointCurrent = `https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}&radius=50&page[limit]=1`;
+                        const amadeusEndpointCurrent = `https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}&radius=500&page[limit]=10`;
 
-                        // Use the access token to fetch the IATA code for current location
+                        // Use the access token to fetch the IATA codes for current location
                         fetch(amadeusEndpointCurrent, {
                             headers: {
                                 Authorization: `Bearer ${accessToken}`
@@ -96,17 +95,28 @@ function processLocationData(currentLocation, destination, departureDate) {
                             .then(response => response.json())
                             .then(data => {
                                 if (data.data.length > 0) {
-                                    const currentIataCode = data.data[0].iataCode;
-                                    resultDiv.innerHTML += `<p>Current Location IATA Code: ${currentIataCode}</p>`;
+                                    const iataCodes = data.data.map(airport => airport.iataCode);
+                                    const selectOptions = iataCodes.map(iataCode => `<option value="${iataCode}">${iataCode}</option>`).join('');
+                                    resultDiv.innerHTML += `
+                                        <p>Select Current Location IATA Code:</p>
+                                        <select id="currentIataCodeSelect">
+                                            ${selectOptions}
+                                        </select>
+                                    `;
 
-                                    // Save current location IATA code in local storage
-                                    localStorage.setItem('currentIataCode', currentIataCode);
+                                    // Add event listener to the select element
+                                    const currentIataCodeSelect = document.getElementById('currentIataCodeSelect');
+                                    currentIataCodeSelect.addEventListener('change', function() {
+                                        const selectedIataCode = currentIataCodeSelect.value;
+                                        // Save selected IATA code in local storage
+                                        localStorage.setItem('currentIataCode', selectedIataCode);
+                                    });
                                 } else {
-                                    console.error('No airport found near the current location.');
+                                    console.error('No airports found near the current location.');
                                 }
                             })
                             .catch(error => {
-                                console.error('Error retrieving current location IATA code:', error);
+                                console.error('Error retrieving current location IATA codes:', error);
                             });
 
                         // Use the access token to fetch the IATA code for destination
@@ -148,8 +158,20 @@ const locationForm = document.getElementById('locationForm');
 locationForm.addEventListener('submit', handleFormSubmission);
 
 function nextPage() {
-    window.location.href = 'flight.html'
+    if (
+        localStorage.getItem('currentLocation') &&
+        localStorage.getItem('destination') &&
+        localStorage.getItem('departureDate') &&
+        localStorage.getItem('destinationLocation') &&
+        localStorage.getItem('currentIataCode') &&
+        localStorage.getItem('destinationIataCode')
+    ) {
+        window.location.href = 'flight.html';
+    } else {
+        alert('Please fill in all the required information before proceeding.');
+    }
 }
+
 // Redirect to the flight.html page
 const flightPage = document.getElementById('flightPage');
 flightPage.addEventListener('click', nextPage);
