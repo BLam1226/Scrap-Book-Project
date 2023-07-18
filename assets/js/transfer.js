@@ -16,92 +16,106 @@ async function searchTransferOffers(
   const clientSecret = 'FFRrmi8ZhebdbYXw';
   
   // Obtain an access token
-  return fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const accessToken = data.access_token;
-      const amadeusEndpoint = `https://test.api.amadeus.com/v1/shopping/transfer-offers?startLocationCode=${airportLocn}&endGeoCode=${hotelLocn}&startDateTime=${transferTime}`;
-      console.log(amadeusEndpoint);
-      // Use the access token to fetch flight price offers
-      return fetch(amadeusEndpoint, {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log('function resolves');
-          console.log(data);
-          // return data;
-        })
-        .catch((error) => {
-          console.error('Error retrieving flight price offers:', error);
-          throw error;
-        });
-      })
-      .catch((error) => {
-        console.error('Error retrieving access token:', error);
-        throw error;
-      });
-    }
-    
+          const accessToken = data.access_token;
+          const amadeusEndpoint = 'https://test.api.amadeus.com/v1/shopping/transfer-offers';
+          console.log(amadeusEndpoint);
+          const params = {
+            // "startLocationCode": `${airportLocn}`,
+            // "endGeoCode": `${hotelLocn}`,
+            // "transferType": "TAXI",
+            // "startDateTime": `${transferTime}`,
+
+            "startLocationCode": "CDG",
+            "endAddressLine": "Avenue Anatole France, 5",
+            "endCityName": "Paris",
+            "endZipCode": "75007",
+            "endCountryCode": "FR",
+            // "endName": "Souvenirs De La Tour",
+            "endGooglePlaceId": "ChIJL-DOWeBv5kcRfTbh97PimNc",
+            "endGeoCode": "48.859466,2.2976965",
+            "transferType": "PRIVATE",
+            "startDateTime": "2023-11-10T10:30:00",
+            "currencyCode": "USD",
+            // // "providerCodes": "TXO",
+            // "passengers": 2,
+            // "stopOvers": [
+            //   {
+            //     "duration": "PT2H30M",
+            //     "sequenceNumber": 1,
+            //     "addressLine": "Avenue de la Bourdonnais, 19",
+            //     "countryCode": "FR",
+            //     "cityName": "Paris",
+            //     "zipCode": "75007",
+            //     "googlePlaceId": "DOWeBv5kcRfTbh97PimN",
+            //     "name": "De La Tours",
+            //     "geoCode": "48.859477,2.2976985",
+            //     "stateCode": "FR"
+            //   }
+            // ],
+            // "startConnectedSegment": {
+            //   "transportationType": "FLIGHT",
+            //   "transportationNumber": "AF380",
+            //   "departure": {
+            //     "localDateTime": "2021-11-10T09:00:00",
+            //     "iataCode": "NCE"
+            //   },
+            //   "arrival": {
+            //     "localDateTime": "2021-11-10T10:00:00",
+            //     "iataCode": "CDG"
+            //   }
+            // },
+            // "passengerCharacteristics": [
+            //   {
+            //     "passengerTypeCode": "ADT",
+            //     "age": 20
+            //   },
+            //   {
+            //     "passengerTypeCode": "CHD",
+            //     "age": 10
+            //   }
+            // ]
+          }
+          // Use the access token to fetch flight price offers
+          return fetch(amadeusEndpoint, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params)
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log('function resolves');
+              console.log(data);
+              resolve(data);
+            })
+            .catch((error) => {
+              console.error('Error retrieving flight price offers:', error);
+              reject(error);
+            });
+          })
+          .catch((error) => {
+            console.error('Error retrieving access token:', error);
+            reject(error);
+          });
+    }, 1000); // 1000 milliseconds timeout
+  });
+}
     
     
     
     
     testButton = $('#test');
     testButton.on('click', searchTransferOffers);
-    
-    // // Testy
-    // var currentLocation;
-    // var destination;
-    // var departureDate;
-    // var destinationLocation;
-    // var currentIataCode;
-    // var destinationIataCode;
-    
-    // // Function to retrieve stored data from session storage
-    // async function retrieveStoredData() {
-    //   // Retrieve stored data from localStorage
-    //   currentLocation = JSON.parse(localStorage.getItem('currentLocation'));
-    //   destination = localStorage.getItem('destination');
-    //   departureDate = localStorage.getItem('departureDate');
-    //   destinationLocation = JSON.parse(localStorage.getItem('destinationLocation'));
-    //   currentIataCode = localStorage.getItem('currentIataCode');
-    //   destinationIataCode = localStorage.getItem('destinationIataCode');
-    //   console.log(currentLocation);
-    //   console.log(destination);
-    //   console.log(departureDate);
-    //   console.log(destinationLocation);
-    //   console.log(currentIataCode);
-    //   console.log(destinationIataCode);
-    // }
-    
-    
-    // async function searchFlightPriceOffers(currentIataCode, destinationIataCode, departureDate) {
-    //   console.log('function 2 called');
-    //   // Use the Amadeus Flight Offers Search API to get flight price offers
-    //   const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
-    //   const clientSecret = 'FFRrmi8ZhebdbYXw';
-    
-    //   // Obtain an access token
-    //   return fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       const accessToken = data.access_token;
-    //       const amadeusEndpoint = `https://test.api.amadeus.com/v1/shopping/transfer-offers?`
-    //       console.log(amadeusEndpoint);
-    //     })
-    // }
