@@ -52,38 +52,42 @@ async function searchFlightPriceOffers(currentIataCode, destinationIataCode, dep
   const clientSecret = 'FFRrmi8ZhebdbYXw';
 
   // Obtain an access token
-  return fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const accessToken = data.access_token;
-      const amadeusEndpoint = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${currentIataCode}&destinationLocationCode=${destinationIataCode}&departureDate=${departureDate}&adults=1&nonStop=true&currencyCode=USD&max=250`;
-      // Use the access token to fetch flight price offers
-      return fetch(amadeusEndpoint, {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
       })
         .then((response) => response.json())
         .then((data) => {
-          return data;
+          const accessToken = data.access_token;
+          const amadeusEndpoint = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${currentIataCode}&destinationLocationCode=${destinationIataCode}&departureDate=${departureDate}&adults=1&nonStop=true&currencyCode=USD&max=250`;
+          // Use the access token to fetch flight price offers
+          fetch(amadeusEndpoint, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              console.error('Error retrieving flight price offers:', error);
+              localStorage.clear();
+              reject(error);
+            });
         })
         .catch((error) => {
-          console.error('Error retrieving flight price offers:', error);
-          throw error;
+          console.error('Error retrieving access token:', error);
+          reject(error);
         });
-    })
-    .catch((error) => {
-      console.error('Error retrieving access token:', error);
-      throw error;
-    });
+    }, 100); // 100 milliseconds timeout
+  });
 }
-
 
 // Function to process flight price offers data
 function processFlightPriceOffers(data) {
