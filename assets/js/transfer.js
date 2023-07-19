@@ -77,6 +77,7 @@ async function searchTransferOffers() {
             "endGeoCode": transferDestination.geocode,
             "transferType": "PRIVATE",
             "startDateTime": `${transferTime}`,
+            "currency": "USD",
 
             // "startLocationCode": 'PHL',
             // "endAddressLine": "Race Street, 1120",
@@ -86,6 +87,7 @@ async function searchTransferOffers() {
             // "endGeoCode": "39.954788,-75.158859",
             // "transferType": "PRIVATE",
             // "startDateTime": "2023-11-10T10:30:00",
+            // "currency": "USD",
           }
 
           // Use the access token to fetch flight price offers
@@ -102,6 +104,13 @@ async function searchTransferOffers() {
               console.log('transfer function resolves');
               waitMsg.text('');
               console.log(data);
+              console.log('Provider String: ' + data.data[0].serviceProvider.name);
+              console.log('Provider Name: ' + data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" "));
+              console.log('Provider Logo: ' + data.data[0].serviceProvider.logoURL);
+              console.log('Quote: $' + data.data[0].converted.monetaryAmount);
+              console.log('Vehicle Desc: ' + data.data[0].vehicle.description);
+              console.log('Seats: ' + data.data[0].vehicle.seats[0].count);
+              console.log('Picture: ' + data.data[0].vehicle.imageURL);
               resolve(data);
             })
             .catch((error) => {

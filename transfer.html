@@ -2,34 +2,45 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transfer Search</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css">
-    <link rel="stylesheet" href="./assets/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transfer Search</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <body>
-  <div>
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4 text-center">
+      <span class="underline text-violet text-violet-font border-4 py-2 px-4 inline-block shadow bg-gray-300">
+        Transfer Search
+      </span>
+    </h1>
+    <div id="result"></div>
+  </div>
+
+  <!-- <img src="https://static.talixo.de/images/talixo-logo-covid-tag-green.png"> -->
+
+  <!-- <div>
     <button
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
       id="test-locator">Test Locator</button>
     <button
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
       id="test-transfer">Test Transfer</button>
-  </div>
+  </div> -->
 
   <div>
     <button
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
-      id="test-all">Big Test</button>  
+      id="test-all">Big Test</button>
   </div>
-    
+
   <p id="wait-msg"></p>
 
-  
+
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-     integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
   <script src="./assets/js/transfer.js"></script>
 </body>
 
