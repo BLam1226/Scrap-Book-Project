@@ -53,7 +53,7 @@ async function searchTransferOffers() {
   const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
   const clientSecret = 'FFRrmi8ZhebdbYXw';
   var waitMsg = $('#wait-msg');
-  waitMsg.text('Searching for Transfer offers, please wait...');
+  waitMsg.text('Searching for Shuttle offers, please wait...');
 
   // Obtain an access token
   return new Promise((resolve, reject) => {
@@ -172,9 +172,11 @@ async function searchTransferOffers() {
 // $('#test-locator').on('click', convertCoords);
 // $('#test-transfer').on('click', searchTransferOffers);
 
+function goBack() {
+  window.location.href = 'index.html';
+}
+
 // $('#test-all').on('click', convertCoords);
 document.addEventListener('DOMContentLoaded', convertCoords);
-$('#go-back').on('click', function() {
-  // Go back to the index.html page
-  window.location.href = 'index.html';
-});
+// Go back to the index.html page
+$('#go-back').on('click', goBack);
