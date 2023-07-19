@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const destinationLocation = JSON.parse(localStorage.getItem('destinationLocation'));
 
   // Perform a search for nearby restaurants using the Amadeus API
-  const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
-  const clientSecret = 'FFRrmi8ZhebdbYXw';
+  const clientId = 'EAF2qyZjqo5YjAGM0cO5ZaFsLkxyEejb';
+  const clientSecret = 'xBxIAnuNYCvkGp4R';
   const amadeusEndpoint = `https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=${destinationLocation.lat}&longitude=${destinationLocation.lng}&radius=10&page%5Blimit%5D=10&page%5Boffset%5D=0&categories=RESTAURANT`;
 
   // Obtain an access token for the Amadeus API with a timeout
@@ -88,12 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
               });
 
-              // Add a button to go back and clear local storage
+              // Add a button to go back
               const backButton = document.createElement('button');
               backButton.textContent = 'Back';
               backButton.classList.add('bg-blue-500', 'text-white', 'py-2', 'px-4', 'rounded');
               backButton.addEventListener('click', () => {
-                localStorage.clear();
                 window.location.href = 'index.html';
               });
 

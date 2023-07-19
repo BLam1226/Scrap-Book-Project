@@ -180,4 +180,7 @@ function nextPage() {
 const flightPage = document.getElementById('flightPage');
 flightPage.addEventListener('click', nextPage);
 
-
+const clearSearch = document.getElementById('clear');
+clearSearch.addEventListener('click', function() {
+    localStorage.clear();
+})
