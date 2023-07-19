@@ -1,20 +1,58 @@
-// New Testy
-var transferTime = '2023-11-11T11:00:00'
-var airportLocn = 'SFO'
-var hotelLocn = '37.6416222,-122.4194019'
+// Testy
+var transferTime = '2023-11-11T11:00:00';
+var airportLocn = 'PHL';
+var hotelLocn = { lat: 39.954788, lng: -75.158859 };
+// JSON.parse(localStorage.getItem('destinationLocation'));
+var transferDestination
 
-console.log('page load')
+// var hotelLat = '39.954788';
+// var hotelLng = '-75.158859';
+
+console.log('page load');
+
+
+async function convertCoords() {
+  var googleKey = 'AIzaSyAdF7nQLNAAGL0HVRqeTJ0jPfrn9l-IgPg'
+  var latlng = hotelLocn.lat + "," + hotelLocn.lng;
+  console.log('convert function called');
+
+  fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&location_type=ROOFTOP&result_type=street_address&key=${googleKey}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.results[0].address_components);
+      console.log('city: ' + data.results[0].address_components[3].long_name);
+      console.log('street #: ' + data.results[0].address_components[0].long_name);
+      console.log('street name: ' + data.results[0].address_components[1].long_name);
+      console.log('zip: ' + data.results[0].address_components[7].long_name);
+      console.log('country: ' + data.results[0].address_components[6].short_name);
+
+      var streetNumber = data.results[0].address_components[0].long_name;
+      var streetName = data.results[0].address_components[1].long_name;
+
+      transferDestination = {
+        addressLine: streetName + ", " + streetNumber,
+        cityName: data.results[0].address_components[3].long_name,
+        zipCode: data.results[0].address_components[7].long_name,
+        countryCode: data.results[0].address_components[6].short_name,
+        geocode: latlng,
+      }
+      // testytesty();
+      searchTransferOffers();
+    })
+}
+
 
 // Function to search for flight price offers using the Amadeus API
-async function searchTransferOffers(
-  // transferTime, 
-  // airportLocn, 
-  // hotelLocn
-  ) {
+async function searchTransferOffers() {
+  console.log('transfer function called');
+  // testytesty();
+
   // Use the Amadeus Flight Offers Search API to get flight price offers
   const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
   const clientSecret = 'FFRrmi8ZhebdbYXw';
-  
+  var waitMsg = $('#wait-msg');
+  waitMsg.text('Searching for Transfer offers, please wait...');
+
   // Obtain an access token
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -31,61 +69,25 @@ async function searchTransferOffers(
           const amadeusEndpoint = 'https://test.api.amadeus.com/v1/shopping/transfer-offers';
           console.log(amadeusEndpoint);
           const params = {
-            // "startLocationCode": `${airportLocn}`,
-            // "endGeoCode": `${hotelLocn}`,
-            // "transferType": "TAXI",
-            // "startDateTime": `${transferTime}`,
-
-            "startLocationCode": "CDG",
-            "endAddressLine": "Avenue Anatole France, 5",
-            "endCityName": "Paris",
-            "endZipCode": "75007",
-            "endCountryCode": "FR",
-            // "endName": "Souvenirs De La Tour",
-            "endGooglePlaceId": "ChIJL-DOWeBv5kcRfTbh97PimNc",
-            "endGeoCode": "48.859466,2.2976965",
+            "startLocationCode": `${airportLocn}`,
+            "endAddressLine": transferDestination.addressLine,
+            "endCityName": transferDestination.cityName,
+            "endZipCode": transferDestination.zipCode,
+            "endCountryCode": transferDestination.countryCode,
+            "endGeoCode": transferDestination.geocode,
             "transferType": "PRIVATE",
-            "startDateTime": "2023-11-10T10:30:00",
-            "currencyCode": "USD",
-            // // "providerCodes": "TXO",
-            // "passengers": 2,
-            // "stopOvers": [
-            //   {
-            //     "duration": "PT2H30M",
-            //     "sequenceNumber": 1,
-            //     "addressLine": "Avenue de la Bourdonnais, 19",
-            //     "countryCode": "FR",
-            //     "cityName": "Paris",
-            //     "zipCode": "75007",
-            //     "googlePlaceId": "DOWeBv5kcRfTbh97PimN",
-            //     "name": "De La Tours",
-            //     "geoCode": "48.859477,2.2976985",
-            //     "stateCode": "FR"
-            //   }
-            // ],
-            // "startConnectedSegment": {
-            //   "transportationType": "FLIGHT",
-            //   "transportationNumber": "AF380",
-            //   "departure": {
-            //     "localDateTime": "2021-11-10T09:00:00",
-            //     "iataCode": "NCE"
-            //   },
-            //   "arrival": {
-            //     "localDateTime": "2021-11-10T10:00:00",
-            //     "iataCode": "CDG"
-            //   }
-            // },
-            // "passengerCharacteristics": [
-            //   {
-            //     "passengerTypeCode": "ADT",
-            //     "age": 20
-            //   },
-            //   {
-            //     "passengerTypeCode": "CHD",
-            //     "age": 10
-            //   }
-            // ]
+            "startDateTime": `${transferTime}`,
+
+            // "startLocationCode": 'PHL',
+            // "endAddressLine": "Race Street, 1120",
+            // "endCityName": "Philadelphia",
+            // "endZipCode": "19107",
+            // "endCountryCode": "US",
+            // "endGeoCode": "39.954788,-75.158859",
+            // "transferType": "PRIVATE",
+            // "startDateTime": "2023-11-10T10:30:00",
           }
+
           // Use the access token to fetch flight price offers
           return fetch(amadeusEndpoint, {
             method: 'POST',
@@ -97,7 +99,8 @@ async function searchTransferOffers(
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log('function resolves');
+              console.log('transfer function resolves');
+              waitMsg.text('');
               console.log(data);
               resolve(data);
             })
@@ -105,17 +108,39 @@ async function searchTransferOffers(
               console.error('Error retrieving flight price offers:', error);
               reject(error);
             });
-          })
-          .catch((error) => {
-            console.error('Error retrieving access token:', error);
-            reject(error);
-          });
+        })
+        .catch((error) => {
+          console.error('Error retrieving access token:', error);
+          reject(error);
+        });
     }, 1000); // 1000 milliseconds timeout
   });
 }
-    
-    
-    
-    
-    testButton = $('#test');
-    testButton.on('click', searchTransferOffers);
+
+// function testytesty() {
+//   console.log(transferDestination);
+//   console.log(typeof transferDestination.addressLine);
+//   console.log(typeof transferDestination.cityName);
+//   console.log(typeof transferDestination.zipCode);
+//   console.log(typeof transferDestination.countryCode);
+//   console.log(typeof transferDestination.geocode);
+//   console.log(transferDestination.addressLine);
+//   console.log(transferDestination.cityName);
+//   console.log(transferDestination.zipCode);
+//   console.log(transferDestination.countryCode);
+//   console.log(transferDestination.geocode);
+// }
+
+// function testAll() {
+//   try {
+//     convertCoords()
+//   } finally {
+//     searchTransferOffers(transferDestination)
+//   }
+// }
+
+
+// $('#test-locator').on('click', convertCoords);
+// $('#test-transfer').on('click', searchTransferOffers);
+
+$('#test-all').on('click', convertCoords);
