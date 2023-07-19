@@ -16,17 +16,18 @@
         Transfer Search
       </span>
     </h1>
-    <div id="result"></div>
-  </div>
+    <div id="card-landing">
 
-  <div class="card-offers my-4 p-4 border border-black rounded shadow">
-    <div>
-      <p class="text-lg font-semibold">Quote: ${data.data[0].converted.monetaryAmount} USD</p>
-      <p class="text-gray-600">Service Provider: ${data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
-      <p class="text-gray-600">Vehicle: ${data.data[0].vehicle.description}</p>
-      <p class="text-gray-600">Seats: ${data.data[0].vehicle.seats[0].count}</p>
+      <div class="card-offers my-4 p-4 border border-black rounded shadow">
+        <p class="text-lg font-semibold">Quote: ${data.data[0].converted.monetaryAmount} USD</p>
+        <p class="text-gray-600">Service Provider: ${data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
+        <p class="text-gray-600">Vehicle: ${data.data[0].vehicle.description}</p>
+        <p class="text-gray-600">Seats: ${data.data[0].vehicle.seats[0].count}</p>
+      </div>
+
     </div>
   </div>
+
   <!-- <div class="relative">
     <img 
       src="https://static.talixo.de/images/talixo-logo-covid-tag-green.png"
@@ -39,7 +40,7 @@
       class="absolute right-0"
       >
   </div> -->
-  
+
 
   <!-- <div>
     <button

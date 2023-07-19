@@ -1,4 +1,6 @@
 // Testy
+var cardLanding = $('#card-landing');
+
 var transferTime = '2023-11-11T11:00:00';
 var airportLocn = 'PHL';
 var hotelLocn = { lat: 39.954788, lng: -75.158859 };
@@ -111,6 +113,17 @@ async function searchTransferOffers() {
               console.log('Vehicle Desc: ' + data.data[0].vehicle.description);
               console.log('Seats: ' + data.data[0].vehicle.seats[0].count);
               console.log('Picture: ' + data.data[0].vehicle.imageURL);
+              
+              var transferCard = $(
+                `<div class="card-offers my-4 p-4 border border-black rounded shadow">
+                  <p class="text-lg font-semibold">Quote: ${data.data[0].converted.monetaryAmount} USD</p>
+                 <p class="text-gray-600">Service Provider: ${data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
+                 <p class="text-gray-600">Vehicle: ${data.data[0].vehicle.description}</p>
+                  <p class="text-gray-600">Seats: ${data.data[0].vehicle.seats[0].count}</p>
+                </div>`
+              );
+              cardLanding.append(transferCard);
+
               resolve(data);
             })
             .catch((error) => {
