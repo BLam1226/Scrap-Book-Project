@@ -172,4 +172,9 @@ async function searchTransferOffers() {
 // $('#test-locator').on('click', convertCoords);
 // $('#test-transfer').on('click', searchTransferOffers);
 
-$('#test-all').on('click', convertCoords);
+// $('#test-all').on('click', convertCoords);
+document.addEventListener('DOMContentLoaded', convertCoords);
+$('#go-back').on('click', function() {
+  // Go back to the index.html page
+  window.location.href = 'index.html';
+});
