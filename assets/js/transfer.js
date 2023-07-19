@@ -106,23 +106,30 @@ async function searchTransferOffers() {
               console.log('transfer function resolves');
               waitMsg.text('');
               console.log(data);
-              console.log('Provider String: ' + data.data[0].serviceProvider.name);
-              console.log('Provider Name: ' + data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" "));
-              console.log('Provider Logo: ' + data.data[0].serviceProvider.logoURL);
-              console.log('Quote: $' + data.data[0].converted.monetaryAmount);
-              console.log('Vehicle Desc: ' + data.data[0].vehicle.description);
-              console.log('Seats: ' + data.data[0].vehicle.seats[0].count);
-              console.log('Picture: ' + data.data[0].vehicle.imageURL);
+              // console.log('Provider String: ' + data.data[0].serviceProvider.name);
+              // console.log('Provider Name: ' + data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" "));
+              // console.log('Provider Logo: ' + data.data[0].serviceProvider.logoURL);
+              // console.log('Quote: $' + data.data[0].converted.monetaryAmount);
+              // console.log('Vehicle Desc: ' + data.data[0].vehicle.description);
+              // console.log('Seats: ' + data.data[0].vehicle.seats[0].count);
+              // console.log('Picture: ' + data.data[0].vehicle.imageURL);
+
+              var offersList = data.data.length
+              if (offersList > 20) {
+                offersList = 20;
+              }
               
-              var transferCard = $(
-                `<div class="card-offers my-4 p-4 border border-black rounded shadow">
-                  <p class="text-lg font-semibold">Quote: ${data.data[0].converted.monetaryAmount} USD</p>
-                 <p class="text-gray-600">Service Provider: ${data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
-                 <p class="text-gray-600">Vehicle: ${data.data[0].vehicle.description}</p>
-                  <p class="text-gray-600">Seats: ${data.data[0].vehicle.seats[0].count}</p>
-                </div>`
-              );
-              cardLanding.append(transferCard);
+              for (var i = 0; i < offersList; i++) {
+                var transferCard = $(
+                  `<div class="card-offers my-4 p-4 border border-black rounded shadow">
+                    <p class="text-lg font-semibold">Quote: ${data.data[i].converted.monetaryAmount} USD</p>
+                   <p class="text-gray-600">Service Provider: ${data.data[i].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
+                   <p class="text-gray-600">Vehicle: ${data.data[i].vehicle.description}</p>
+                    <p class="text-gray-600">Seats: ${data.data[i].vehicle.seats[0].count}</p>
+                  </div>`
+                );
+                cardLanding.append(transferCard);
+              }
 
               resolve(data);
             })
