@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, 100); // 100-millisecond timeout
   });
+  // Function to handle restaurant selection
+  const handleRestaurantSelection = (restaurant) => {
+    // Save the selected restaurant to local storage
+    localStorage.setItem('selectedRestaurant', JSON.stringify(restaurant));
+  };
 
   // Use the access token to fetch nearby restaurants with a timeout
   fetchAccessToken
@@ -80,8 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
                           <p>Formatted Location: ${formattedLocation}</p>
                         </div>
                       `;
-
                     restaurantList.appendChild(restaurantDiv);
+                    // Add event listener to handle restaurant selection
+                    restaurantDiv.addEventListener('click', () => {
+                      handleRestaurantSelection(restaurant);
+                    });
                   } else {
                     console.error(`No results found for search query: ${searchQuery}`);
                   }

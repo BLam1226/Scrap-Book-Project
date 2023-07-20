@@ -97,7 +97,7 @@ function processFlightPriceOffers(data) {
 
   if (data.data && data.data.length > 0) {
     resultDiv.innerHTML = '<h2 class="underline text-3xl">Flight Price Offers:</h2>';
-    data.data.forEach((offer) => {
+    data.data.forEach((offer, index) => { // <-- Add 'index' parameter here
       // Check if the offer price is not already stored
       if (!uniqueOffers[offer.price.total]) {
         uniqueOffers[offer.price.total] = true; // Store the offer price
@@ -112,6 +112,9 @@ function processFlightPriceOffers(data) {
             <p class="text-gray-600">Airline: ${offer.itineraries[0].segments[0].carrierCode}</p>
             <p class="text-gray-600">Departure Terminal: ${departureTerminal}</p>
             <p class="text-gray-600">Arrival Terminal: ${arrivalTerminal}</p>
+            <button class="btn-save-flight bg-green-500 text-white py-2 px-4 rounded" data-index="${index}">
+              Save Flight
+            </button>
           </div>
         `;
       }
@@ -125,15 +128,24 @@ function processFlightPriceOffers(data) {
       // Go back to the index.html page
       window.location.href = 'index.html';
     });
-
     // Append the back button to the result div
     resultDiv.appendChild(backButton);
-
-    // Clear local storage after displaying flight prices
-    localStorage.clear();
+    // Add event listeners to the "Save Flight" buttons
+    const saveButtons = document.querySelectorAll('.btn-save-flight');
+    saveButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        const selectedIndex = event.target.dataset.index;
+        // Save the selected flight ticket to local storage
+        saveSelectedFlightToLocalStorage(data.data[selectedIndex]);
+      });
+    });
   } else {
     resultDiv.innerHTML = '<p class="text-red-500">No flight price offers found.</p>';
-    localStorage.clear();
   }
 }
 
+// Function to save the selected flight ticket to local storage
+function saveSelectedFlightToLocalStorage(selectedFlight) {
+  // Save the selected flight data to local storage
+  localStorage.setItem('selectedFlight', JSON.stringify(selectedFlight));
+}
