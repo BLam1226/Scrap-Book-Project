@@ -97,7 +97,7 @@ async function searchTransferOffers() {
               if (offersList > 20) {
                 offersList = 20;
               }
-              
+
               for (var i = 0; i < offersList; i++) {
                 var transferCard = $(
                   `<div class="card-offers my-4 p-4 border border-black rounded shadow">
@@ -111,6 +111,15 @@ async function searchTransferOffers() {
               }
 
               resolve(data);
+
+              // Add an event listener to each transfer card
+              cardLanding.on('click', '.card-offers', function () {
+                const selectedIndex = $(this).index();
+                const selectedTransfer = data.data[selectedIndex];
+
+                // Save the selected transfer in local storage
+                localStorage.setItem('selectedTransfer', JSON.stringify(selectedTransfer));
+              });
             })
             .catch((error) => {
               console.error('Error retrieving flight price offers:', error);
