@@ -8,7 +8,7 @@ backButton.addEventListener('click', () => {
 // Function to create a card element for each hotel
 function createHotelCard(hotel) {
     const card = document.createElement('div');
-    card.classList.add('bg-white', 'shadow-md', 'rounded', 'p-4', 'my-4');
+    card.classList.add('bg-white', 'shadow-md', 'text-black', 'rounded', 'p-4', 'my-4');
 
     card.innerHTML = `
         <p>Name: ${hotel.name}</p>
