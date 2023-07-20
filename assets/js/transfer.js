@@ -1,16 +1,21 @@
 // Testy
 var cardLanding = $('#card-landing');
 
+// TODO Replace Test Values w prev values
 var transferTime = '2023-11-11T11:00:00';
 var airportLocn = 'PHL';
 var hotelLocn = { lat: 39.954788, lng: -75.158859 };
-// JSON.parse(localStorage.getItem('destinationLocation'));
+var selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
 var transferDestination
 
 // var hotelLat = '39.954788';
 // var hotelLng = '-75.158859';
 
 console.log('page load');
+console.log(selectedHotel);
+console.log(selectedHotel.geocode);
+console.log(selectedHotel.geocode.latitude);
+console.log(selectedHotel.geocode.longitude);
 
 
 async function convertCoords() {
