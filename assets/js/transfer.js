@@ -1,19 +1,46 @@
 // Variables
 // TODO Add/edit notations for each step/section of code
 var cardLanding = $('#card-landing');
+var waitMsg = $('#wait-msg');
+var errMsg = $('#err-msg');
 
 // TODO Make page load conditional on localStorage vars
-var transferTime = localStorage.getItem('departureDate') + 'T11:00:00';
-var airportLocn = localStorage.getItem('destinationIataCode');
-var selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
-var hotelLat = selectedHotel.geoCode.latitude;
-var hotelLng = selectedHotel.geoCode.longitude;
-var transferDestination
+var transferDate;
+var transferTime;
+var airportLocn;
+var selectedHotel;
+var hotelLat;
+var hotelLng;
+var transferDestination;
 
 
 console.log('page load');
 console.log(selectedHotel);
 
+
+function getInputs() {
+  transferDate = localStorage.getItem('departureDate');
+  transferTime = transferDate + 'T11:00:00';
+  airportLocn = localStorage.getItem('destinationIataCode');
+  selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
+  console.log(transferDate);
+  console.log(transferTime);
+  
+  if (transferTime && airportLocn && selectedHotel) {
+    hotelLat = selectedHotel.geoCode.latitude;
+    hotelLng = selectedHotel.geoCode.longitude;
+    convertCoords();
+  } else {
+    waitMsg.text('Your search is lacking information!');
+    if (!transferDate || !airportLocn) {
+      errMsg.text('Please please to the previous page and enter a Destination and Departure Date.');
+    } else if (!selectedHotel) {
+      errMsg.text('Please select a hotel from the "Find Nearby Hotels" page before searching for a hotel shuttle.');
+    } else {
+      errMsg.text('Please return to the previous page and try again.');
+    }
+  }
+}
 
 async function convertCoords() {
   var googleKey = 'AIzaSyAdF7nQLNAAGL0HVRqeTJ0jPfrn9l-IgPg';
@@ -48,7 +75,6 @@ async function searchTransferOffers() {
   // TODO Use the Amadeus Flight Offers Search API to get flight price offers
   const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
   const clientSecret = 'FFRrmi8ZhebdbYXw';
-  var waitMsg = $('#wait-msg');
   waitMsg.text('Searching for Shuttle offers, please wait...');
 
   // Obtain an access token
@@ -94,16 +120,16 @@ async function searchTransferOffers() {
               console.log(data);
 
               var offersList = data.data.length
-              if (offersList > 20) {
-                offersList = 20;
+              if (offersList > 12) {
+                offersList = 12;
               }
 
               for (var i = 0; i < offersList; i++) {
                 var transferCard = $(
                   `<div class="card-offers my-4 p-4 border border-black rounded shadow">
-                    <p class="text-lg font-semibold">Quote: ${data.data[i].converted.monetaryAmount} USD</p>
-                   <p class="text-gray-600">Service Provider: ${data.data[i].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
-                   <p class="text-gray-600">Vehicle: ${data.data[i].vehicle.description}</p>
+                    <p class="text-lg font-semibold">Shuttle Quote: ${data.data[i].converted.monetaryAmount} USD</p>
+                    <p class="text-gray-600">Service Provider: ${data.data[i].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
+                    <p class="text-gray-600">Vehicle: ${data.data[i].vehicle.description}</p>
                     <p class="text-gray-600">Seats: ${data.data[i].vehicle.seats[0].count}</p>
                   </div>`
                 );
@@ -135,8 +161,10 @@ async function searchTransferOffers() {
 }
 
 
-document.addEventListener('DOMContentLoaded', convertCoords);
+document.addEventListener('DOMContentLoaded', getInputs);
 // Go back to the index.html page
-$('#go-back').on('click', function() {
+$('#go-back').on('click', function () {
+  waitMsg.text('');
+  errMsg.text('');
   window.location.href = 'index.html';
 });
