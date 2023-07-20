@@ -50,3 +50,22 @@ img.max-w-full {
 .airport {
     color: #fd754d;
 }
+
+/* Add CSS to position the saved containers on the right side */
+.savedContainersContainer {
+    position: fixed;
+    top: 0;
+    right: 20px;
+    padding: 10px;
+    background-color: transparent; /* Set background color to transparent */
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  /* Style for individual saved containers */
+  .savedContainersContainer > div {
+    padding: 10px;
+    background-color: transparent; /* Set background color to transparent */
+    box-shadow: none; /* Remove box shadow */
+  }
+  
