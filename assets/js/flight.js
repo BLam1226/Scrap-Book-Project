@@ -107,7 +107,7 @@ function processFlightPriceOffers(data) {
 
   if (data.data && data.data.length > 0) {
     resultDiv.innerHTML =
-      '<h2 class="underline text-3xl">Flight Price Offers:</h2>';
+      '<h2 class="underline text-3xl text-white">Flight Price Offers:</h2>';
     data.data.forEach((offer, index) => {
       // <-- Add 'index' parameter here
       // Check if the offer price is not already stored

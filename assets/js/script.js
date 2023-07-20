@@ -99,10 +99,12 @@ function processLocationData(currentLocation, destination, departureDate) {
                                         const iataCodes = data.data.map(airport => airport.iataCode);
                                         const selectOptions = iataCodes.map(iataCode => `<option value="${iataCode}">${iataCode}</option>`).join('');
                                         resultDiv.innerHTML += `
+                                        <div class="inputs pink-background font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline">
                                         <p>Select Which Airport You Would Like To Use:</p>
                                         <select id="currentIataCodeSelect">
                                             ${selectOptions}
                                         </select>
+                                        </div>
                                     `;
 
                                         // Add event listener to the select element
@@ -195,7 +197,7 @@ function displaySavedFlight() {
 
     if (savedFlight) {
         savedFlightContainer.innerHTML = `
-        <div class="card-offers my-4 p-4 border border-black rounded shadow">
+        <div class="savedCards card-offers my-4 p-4 border border-black rounded shadow">
           <p class="text-lg font-semibold">Price: ${savedFlight.price.total} USD</p>
           <p class="text-gray-600">Airline: ${savedFlight.itineraries[0].segments[0].carrierCode}</p>
           <p class="text-gray-600">Departure Terminal: ${savedFlight.itineraries[0].segments[0].departure.terminal}</p>
@@ -218,7 +220,7 @@ function displaySavedRestaurant() {
 
     if (savedRestaurant) {
         savedRestaurantContainer.innerHTML = `
-        <div class="card-offers my-4 p-4 border border-black rounded shadow">
+        <div class="savedCards card-offers my-4 p-4 border border-black rounded shadow">
           <h2 class="underline text-2xl bold">${savedRestaurant.name}</h2>
           <p>Address: ${savedRestaurant.address}</p>
         </div>
@@ -238,7 +240,7 @@ function displaySavedHotel() {
 
     if (savedHotel) {
         savedHotelContainer.innerHTML = `
-            <div class="card-offers my-4 p-4 border border-black rounded shadow">
+            <div class="savedCards card-offers my-4 p-4 border border-black rounded shadow">
                 <h2 class="underline text-2xl bold">${savedHotel.name}</h2>
                 <p>Rating: ${savedHotel.rating} stars</p>
                 <p>Distance: ${savedHotel.distance.value} miles away</p>
@@ -259,7 +261,7 @@ function displaySavedTransfer() {
 
     if (savedTransfer) {
         savedTransferContainer.innerHTML = `
-        <div class="card-offers my-4 p-4 border border-black rounded shadow">
+        <div class="savedCards card-offers my-4 p-4 border border-black rounded shadow">
           <p class="text-lg font-semibold">Quote: ${savedTransfer.converted.monetaryAmount} USD</p>
           <p class="text-gray-600">Service Provider: ${savedTransfer.serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
           <p class="text-gray-600">Vehicle: ${savedTransfer.vehicle.description}</p>

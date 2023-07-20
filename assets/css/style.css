@@ -2,17 +2,22 @@ body {
     background-color: rgb(195, 228, 249);
 }
 
-/* Define custom violet color */
-.text-violet {
-    color: rgb(230, 11, 230);
+.mainPage {
+    background-image: url(file:///C:/Users/kell6/Downloads/airplane-sky-flight-clouds-sunset-4k_1541114592.jpg);
+    background-size: 100%;
 }
 
-.text-violet-font {
-    font-family: cursive;
+.altPage {
+    background-color: #2b1d42;
 }
 
 .card-offers {
     background-color: bisque;
+}
+
+.savedCards {
+    width: 30%;
+    margin-left: 65%;
 }
 
 img.max-w-full {
@@ -20,4 +25,26 @@ img.max-w-full {
     max-width: 100%;
     height: auto;
     margin: auto;
+}
+
+.inputs {
+    width: 50%;
+}
+
+.header {
+    margin-top: 20%;
+    zoom: 150%;
+}
+
+.plan {
+    margin-left: 20%;
+    background-color: #fd754d;
+}
+
+.pink-background {
+    background-color: #fd754d;
+}
+
+.airport {
+    color: #fd754d;
 }
