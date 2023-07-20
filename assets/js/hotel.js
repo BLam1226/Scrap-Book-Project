@@ -1,14 +1,21 @@
 // Add a button to go back
 const backButton = document.createElement('button');
-backButton.textContent = 'Back';
+backButton.textContent = 'Home';
 backButton.classList.add('bg-blue-500', 'text-white', 'py-2', 'px-4', 'rounded');
 backButton.addEventListener('click', () => {
     window.location.href = 'index.html';
 })
+// Add a hidden button to go search for shuttles
+const transferButton = document.createElement('button');
+transferButton.textContent = 'Find Hotel Shuttle';
+transferButton.classList.add('bg-blue-500', 'text-white', 'py-2', 'px-4', 'rounded', 'hidden');
+transferButton.addEventListener('click', () => {
+    window.location.href = 'transfer.html';
+})
 // Function to create a card element for each hotel
 function createHotelCard(hotel) {
     const card = document.createElement('div');
-    card.classList.add('bg-white', 'shadow-md', 'rounded', 'p-4', 'my-4');
+    card.classList.add('bg-white', 'shadow-md', 'text-black', 'rounded', 'p-4', 'my-4');
 
     card.innerHTML = `
         <p>Name: ${hotel.name}</p>
@@ -19,6 +26,7 @@ function createHotelCard(hotel) {
     // Add an event listener to the card to save the selected hotel data to localStorage when clicked
     card.addEventListener('click', () => {
         localStorage.setItem('selectedHotel', JSON.stringify(hotel));
+        transferButton.classList.remove('hidden');
     });
 
     return card;
@@ -47,6 +55,10 @@ function processHotels(data) {
     // Append the back button to the document body or a specific element, for example:
     const backDiv = document.querySelector(".back");
     backDiv.appendChild(backButton);
+
+    // Append the hotel button to a specific element
+    const transferDiv = document.querySelector(".transfer");
+    transferDiv.appendChild(transferButton);
 }
 
 //   // Use the Amadeus Flight Offers Search API to get flight price offers

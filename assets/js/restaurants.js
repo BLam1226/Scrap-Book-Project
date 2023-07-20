@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // Add a button to go back
               const backButton = document.createElement('button');
-              backButton.textContent = 'Back';
+              backButton.textContent = 'Home';
               backButton.classList.add('bg-blue-500', 'text-white', 'py-2', 'px-4', 'rounded');
               backButton.addEventListener('click', () => {
                 window.location.href = 'index.html';

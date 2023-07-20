@@ -1,7 +1,13 @@
 // Initialize the Google Maps API
 function initMap() {
 }
-
+    // hide buttons on DOM Load
+document.addEventListener('DOMContentLoaded', function() {
+    $('#flightPage').addClass('hidden');
+    $('#hotelPage').addClass('hidden');
+    $('#transferPage').addClass('hidden');
+    $('#restaurantsPage').addClass('hidden');
+});
 // Function to handle form submission
 function handleFormSubmission(event) {
     event.preventDefault(); // Prevent the form from submitting
@@ -102,6 +108,7 @@ function processLocationData(currentLocation, destination, departureDate) {
                                         <div class="inputs pink-background font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline">
                                         <p>Select Which Airport You Would Like To Use:</p>
                                         <select id="currentIataCodeSelect">
+                                            <option value="">--Select--</option>
                                             ${selectOptions}
                                         </select>
                                         </div>
@@ -113,6 +120,11 @@ function processLocationData(currentLocation, destination, departureDate) {
                                             const selectedIataCode = currentIataCodeSelect.value;
                                             // Save selected IATA code in local storage
                                             localStorage.setItem('currentIataCode', selectedIataCode);
+                                            // Reveal buttons on airport selection
+                                            $('#flightPage').removeClass('hidden');
+                                            $('#hotelPage').removeClass('hidden');
+                                            $('#transferPage').removeClass('hidden');
+                                            $('#restaurantsPage').removeClass('hidden');
                                         });
                                     } else {
                                         console.error('No airports found near the current location.');
@@ -185,10 +197,12 @@ flightPage.addEventListener('click', nextPage);
 const clearSearch = document.getElementById('clear');
 clearSearch.addEventListener('click', function () {
     localStorage.clear();
+    window.location.reload();
 })
 
 // Function to display the saved flight ticket on index.html
 function displaySavedFlight() {
+
     // Retrieve the saved flight data from local storage
     const savedFlight = JSON.parse(localStorage.getItem('selectedFlight'));
 
@@ -204,6 +218,11 @@ function displaySavedFlight() {
           <p class="text-gray-600">Arrival Terminal: ${savedFlight.itineraries[0].segments[savedFlight.itineraries[0].segments.length - 1].arrival.terminal}</p>
         </div>
       `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 
@@ -225,6 +244,11 @@ function displaySavedRestaurant() {
           <p>Address: ${savedRestaurant.address}</p>
         </div>
       `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 
@@ -246,6 +270,11 @@ function displaySavedHotel() {
                 <p>Distance: ${savedHotel.distance.value} miles away</p>
             </div>
         `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 
@@ -268,6 +297,11 @@ function displaySavedTransfer() {
           <p class="text-gray-600">Seats: ${savedTransfer.vehicle.seats[0].count}</p>
         </div>
       `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 

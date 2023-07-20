@@ -107,7 +107,7 @@ function processFlightPriceOffers(data) {
 
   if (data.data && data.data.length > 0) {
     resultDiv.innerHTML =
-      '<h2 class="underline text-3xl">Flight Price Offers:</h2>';
+      '<h2 class="underline text-3xl text-white">Flight Price Offers:</h2>';
     data.data.forEach((offer, index) => {
       // <-- Add 'index' parameter here
       // Check if the offer price is not already stored
@@ -136,6 +136,24 @@ function processFlightPriceOffers(data) {
     });
 
     // Create a back button
+    const hotelButton = document.createElement("button");
+    hotelButton.innerText = "Find Nearby Hotels";
+    hotelButton.classList.add(
+      "bg-blue-500",
+      "text-white",
+      "py-2",
+      "px-4",
+      "rounded",
+      "hidden"
+    );
+    hotelButton.addEventListener("click", () => {
+      // Go back to the index.html page
+      window.location.href = "hotel.html";
+    });
+    // Append the back button to the result div
+    document.getElementById("hotelBtn").appendChild(hotelButton);
+
+    // Create a back button
     const backButton = document.createElement("button");
     backButton.innerText = "Back";
     backButton.classList.add(
@@ -150,7 +168,7 @@ function processFlightPriceOffers(data) {
       window.location.href = "index.html";
     });
     // Append the back button to the result div
-    resultDiv.appendChild(backButton);
+    document.getElementById("backBtn").appendChild(backButton);
     // Add event listeners to the "Save Flight" buttons
     const saveButtons = document.querySelectorAll(".btn-save-flight");
     saveButtons.forEach((button) => {
@@ -158,6 +176,8 @@ function processFlightPriceOffers(data) {
         const selectedIndex = event.target.dataset.index;
         // Save the selected flight ticket to local storage
         saveSelectedFlightToLocalStorage(data.data[selectedIndex]);
+        // Reveal hotel button on flight selection
+        hotelButton.classList.remove("hidden");
       });
     });
   } else {
