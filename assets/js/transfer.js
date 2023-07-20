@@ -2,26 +2,29 @@
 // Boogie Woogie Woogie
 var cardLanding = $('#card-landing');
 
-// TODO Replace Test Values w prev values
-var transferTime = '2023-11-11T11:00:00';
-var airportLocn = 'PHL';
-var hotelLocn = { lat: 39.954788, lng: -75.158859 };
+// TODO Make page load conditional on localStorage vars
+var transferTime = localStorage.getItem('departureDate') + 'T11:00:00';
+// '2023-11-11T11:00:00';
+var airportLocn = localStorage.getItem('destinationIataCode');
+// 'PHL';
+// var hotelLocn = { lat: 39.954788, lng: -75.158859 };
 var selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
 var transferDestination
 
-// var hotelLat = '39.954788';
-// var hotelLng = '-75.158859';
+var hotelLat = selectedHotel.geoCode.latitude;
+var hotelLng = selectedHotel.geoCode.longitude;
 
 console.log('page load');
 console.log(selectedHotel);
-console.log(selectedHotel.geocode);
-console.log(selectedHotel.geocode.latitude);
-console.log(selectedHotel.geocode.longitude);
+console.log(selectedHotel.geoCode);
+console.log(selectedHotel.geoCode.latitude);
+console.log(selectedHotel.geoCode.longitude);
 
 
 async function convertCoords() {
-  var googleKey = 'AIzaSyAdF7nQLNAAGL0HVRqeTJ0jPfrn9l-IgPg'
-  var latlng = hotelLocn.lat + "," + hotelLocn.lng;
+  var googleKey = 'AIzaSyAdF7nQLNAAGL0HVRqeTJ0jPfrn9l-IgPg';
+  var latlng = hotelLat + "," + hotelLng;
+  // hotelLocn.lat + "," + hotelLocn.lng;
   console.log('convert function called');
 
   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&location_type=ROOFTOP&result_type=street_address&key=${googleKey}`)
@@ -42,7 +45,7 @@ async function convertCoords() {
         cityName: data.results[0].address_components[3].long_name,
         zipCode: data.results[0].address_components[7].long_name,
         countryCode: data.results[0].address_components[6].short_name,
-        geocode: latlng,
+        geoCode: latlng,
       }
       // testytesty();
       searchTransferOffers();
@@ -82,7 +85,7 @@ async function searchTransferOffers() {
             "endCityName": transferDestination.cityName,
             "endZipCode": transferDestination.zipCode,
             "endCountryCode": transferDestination.countryCode,
-            "endGeoCode": transferDestination.geocode,
+            "endGeoCode": transferDestination.geoCode,
             "transferType": "PRIVATE",
             "startDateTime": `${transferTime}`,
             "currency": "USD",
