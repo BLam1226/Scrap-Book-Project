@@ -1,10 +1,9 @@
-// Variables
-// TODO Add/edit notations for each step/section of code
+// Html anchors
 var cardLanding = $('#card-landing');
 var waitMsg = $('#wait-msg');
 var errMsg = $('#err-msg');
 
-// TODO Make page load conditional on localStorage vars
+// Universal access point for vars
 var transferDate;
 var transferTime;
 var airportLocn;
@@ -13,24 +12,23 @@ var hotelLat;
 var hotelLng;
 var transferDestination;
 
-
-console.log('page load');
-console.log(selectedHotel);
-
-
+// First step, retrieve airport and hotel data from local storage
 function getInputs() {
+  // Assign values to universal vars
   transferDate = localStorage.getItem('departureDate');
   transferTime = transferDate + 'T11:00:00';
   airportLocn = localStorage.getItem('destinationIataCode');
   selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
-  console.log(transferDate);
-  console.log(transferTime);
-  
+
+  // Verify needed local storage data exists before proceeding
   if (transferTime && airportLocn && selectedHotel) {
+    // Reformat geoCode data for Google API
     hotelLat = selectedHotel.geoCode.latitude;
     hotelLng = selectedHotel.geoCode.longitude;
+    // Initiate next step, hotel coordinate conversion
     convertCoords();
   } else {
+    // Post appropriate error messages if there is insufficient info to proceed
     waitMsg.text('Your search is lacking information!');
     if (!transferDate || !airportLocn) {
       errMsg.text('Please please to the previous page and enter a Destination and Departure Date.');
@@ -42,20 +40,20 @@ function getInputs() {
   }
 }
 
+// Next step, converting hotel coordinates into an address the Transfer Search API can read with Google GeoCoder API
 async function convertCoords() {
+  // Resources and formatting for Google GeoCoder API
   var googleKey = 'AIzaSyAdF7nQLNAAGL0HVRqeTJ0jPfrn9l-IgPg';
   var latlng = hotelLat + "," + hotelLng;
 
-  console.log('convert function called');
-
+  // Fetch address data
   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&location_type=ROOFTOP&result_type=street_address&key=${googleKey}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.results[0].address_components);
 
       var streetNumber = data.results[0].address_components[0].long_name;
       var streetName = data.results[0].address_components[1].long_name;
-
+      // Set univeral variable to object holding acquired data
       transferDestination = {
         addressLine: streetName + ", " + streetNumber,
         cityName: data.results[0].address_components[3].long_name,
@@ -63,18 +61,19 @@ async function convertCoords() {
         countryCode: data.results[0].address_components[6].short_name,
         geoCode: latlng,
       }
+      // Initiate final step, searching for transfer offers using Amadeus API
       searchTransferOffers();
     })
 }
 
 
-// TODO Function to search for flight price offers using the Amadeus API
+// Final step, searching for transfer offers using the Amadeus API and printing results to browser
 async function searchTransferOffers() {
-  console.log('transfer function called');
 
-  // TODO Use the Amadeus Flight Offers Search API to get flight price offers
+  // Resources for Amadeus API
   const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
   const clientSecret = 'FFRrmi8ZhebdbYXw';
+  // Post wait message while while API call is resolving
   waitMsg.text('Searching for Shuttle offers, please wait...');
 
   // Obtain an access token
@@ -115,15 +114,14 @@ async function searchTransferOffers() {
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log('transfer function resolves');
+              // Clear wait message text
               waitMsg.text('');
-              console.log(data);
-
+              // Assess number of offers, limit number printed if needed
               var offersList = data.data.length
               if (offersList > 12) {
                 offersList = 12;
               }
-
+              // Print offers as cards and append to the document
               for (var i = 0; i < offersList; i++) {
                 var transferCard = $(
                   `<div class="card-offers my-4 p-4 border border-black rounded shadow">
@@ -135,17 +133,17 @@ async function searchTransferOffers() {
                 );
                 cardLanding.append(transferCard);
               }
-
-              resolve(data);
-
+              
               // Add an event listener to each transfer card
               cardLanding.on('click', '.card-offers', function () {
                 const selectedIndex = $(this).index();
                 const selectedTransfer = data.data[selectedIndex];
-
+                
                 // Save the selected transfer in local storage
                 localStorage.setItem('selectedTransfer', JSON.stringify(selectedTransfer));
               });
+
+              resolve(data);
             })
             .catch((error) => {
               console.error('Error retrieving flight price offers:', error);
@@ -160,9 +158,9 @@ async function searchTransferOffers() {
   });
 }
 
-
+// Initiate first step on page load
 document.addEventListener('DOMContentLoaded', getInputs);
-// Go back to the index.html page
+// Clear any messages and go back to the index.html page
 $('#go-back').on('click', function () {
   waitMsg.text('');
   errMsg.text('');
