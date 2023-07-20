@@ -1,45 +1,59 @@
-// Testy
-// Boogie Woogie Woogie
+// Html anchors
 var cardLanding = $('#card-landing');
+var waitMsg = $('#wait-msg');
+var errMsg = $('#err-msg');
 
-// TODO Make page load conditional on localStorage vars
-var transferTime = localStorage.getItem('departureDate') + 'T11:00:00';
-// '2023-11-11T11:00:00';
-var airportLocn = localStorage.getItem('destinationIataCode');
-// 'PHL';
-// var hotelLocn = { lat: 39.954788, lng: -75.158859 };
-var selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
-var transferDestination
+// Universal access point for vars
+var transferDate;
+var transferTime;
+var airportLocn;
+var selectedHotel;
+var hotelLat;
+var hotelLng;
+var transferDestination;
 
-var hotelLat = selectedHotel.geoCode.latitude;
-var hotelLng = selectedHotel.geoCode.longitude;
+// First step, retrieve airport and hotel data from local storage
+function getInputs() {
+  // Assign values to universal vars
+  transferDate = localStorage.getItem('departureDate');
+  transferTime = transferDate + 'T11:00:00';
+  airportLocn = localStorage.getItem('destinationIataCode');
+  selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
 
-console.log('page load');
-console.log(selectedHotel);
-console.log(selectedHotel.geoCode);
-console.log(selectedHotel.geoCode.latitude);
-console.log(selectedHotel.geoCode.longitude);
+  // Verify needed local storage data exists before proceeding
+  if (transferTime && airportLocn && selectedHotel) {
+    // Reformat geoCode data for Google API
+    hotelLat = selectedHotel.geoCode.latitude;
+    hotelLng = selectedHotel.geoCode.longitude;
+    // Initiate next step, hotel coordinate conversion
+    convertCoords();
+  } else {
+    // Post appropriate error messages if there is insufficient info to proceed
+    waitMsg.text('Your search is lacking information!');
+    if (!transferDate || !airportLocn) {
+      errMsg.text('Please please to the previous page and enter a Destination and Departure Date.');
+    } else if (!selectedHotel) {
+      errMsg.text('Please select a hotel from the "Find Nearby Hotels" page before searching for a hotel shuttle.');
+    } else {
+      errMsg.text('Please return to the previous page and try again.');
+    }
+  }
+}
 
-
+// Next step, converting hotel coordinates into an address the Transfer Search API can read with Google GeoCoder API
 async function convertCoords() {
+  // Resources and formatting for Google GeoCoder API
   var googleKey = 'AIzaSyAdF7nQLNAAGL0HVRqeTJ0jPfrn9l-IgPg';
   var latlng = hotelLat + "," + hotelLng;
-  // hotelLocn.lat + "," + hotelLocn.lng;
-  console.log('convert function called');
 
+  // Fetch address data
   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&location_type=ROOFTOP&result_type=street_address&key=${googleKey}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.results[0].address_components);
-      console.log('city: ' + data.results[0].address_components[3].long_name);
-      console.log('street #: ' + data.results[0].address_components[0].long_name);
-      console.log('street name: ' + data.results[0].address_components[1].long_name);
-      console.log('zip: ' + data.results[0].address_components[7].long_name);
-      console.log('country: ' + data.results[0].address_components[6].short_name);
 
       var streetNumber = data.results[0].address_components[0].long_name;
       var streetName = data.results[0].address_components[1].long_name;
-
+      // Set univeral variable to object holding acquired data
       transferDestination = {
         addressLine: streetName + ", " + streetNumber,
         cityName: data.results[0].address_components[3].long_name,
@@ -47,21 +61,19 @@ async function convertCoords() {
         countryCode: data.results[0].address_components[6].short_name,
         geoCode: latlng,
       }
-      // testytesty();
+      // Initiate final step, searching for transfer offers using Amadeus API
       searchTransferOffers();
     })
 }
 
 
-// Function to search for flight price offers using the Amadeus API
+// Final step, searching for transfer offers using the Amadeus API and printing results to browser
 async function searchTransferOffers() {
-  console.log('transfer function called');
-  // testytesty();
 
-  // Use the Amadeus Flight Offers Search API to get flight price offers
+  // Resources for Amadeus API
   const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
   const clientSecret = 'FFRrmi8ZhebdbYXw';
-  var waitMsg = $('#wait-msg');
+  // Post wait message while while API call is resolving
   waitMsg.text('Searching for Shuttle offers, please wait...');
 
   // Obtain an access token
@@ -89,19 +101,9 @@ async function searchTransferOffers() {
             "transferType": "PRIVATE",
             "startDateTime": `${transferTime}`,
             "currency": "USD",
-
-            // "startLocationCode": 'PHL',
-            // "endAddressLine": "Race Street, 1120",
-            // "endCityName": "Philadelphia",
-            // "endZipCode": "19107",
-            // "endCountryCode": "US",
-            // "endGeoCode": "39.954788,-75.158859",
-            // "transferType": "PRIVATE",
-            // "startDateTime": "2023-11-10T10:30:00",
-            // "currency": "USD",
           }
 
-          // Use the access token to fetch flight price offers
+          // Use the access token to fetch transfer offers
           return fetch(amadeusEndpoint, {
             method: 'POST',
             headers: {
@@ -112,44 +114,36 @@ async function searchTransferOffers() {
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log('transfer function resolves');
+              // Clear wait message text
               waitMsg.text('');
-              console.log(data);
-              // console.log('Provider String: ' + data.data[0].serviceProvider.name);
-              // console.log('Provider Name: ' + data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" "));
-              // console.log('Provider Logo: ' + data.data[0].serviceProvider.logoURL);
-              // console.log('Quote: $' + data.data[0].converted.monetaryAmount);
-              // console.log('Vehicle Desc: ' + data.data[0].vehicle.description);
-              // console.log('Seats: ' + data.data[0].vehicle.seats[0].count);
-              // console.log('Picture: ' + data.data[0].vehicle.imageURL);
-
+              // Assess number of offers, limit number printed if needed
               var offersList = data.data.length
-              if (offersList > 20) {
-                offersList = 20;
+              if (offersList > 12) {
+                offersList = 12;
               }
-
+              // Print offers as cards and append to the document
               for (var i = 0; i < offersList; i++) {
                 var transferCard = $(
                   `<div class="card-offers my-4 p-4 border border-black rounded shadow">
-                    <p class="text-lg font-semibold">Quote: ${data.data[i].converted.monetaryAmount} USD</p>
-                   <p class="text-gray-600">Service Provider: ${data.data[i].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
-                   <p class="text-gray-600">Vehicle: ${data.data[i].vehicle.description}</p>
+                    <p class="text-lg font-semibold">Shuttle Quote: ${data.data[i].converted.monetaryAmount} USD</p>
+                    <p class="text-gray-600">Service Provider: ${data.data[i].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
+                    <p class="text-gray-600">Vehicle: ${data.data[i].vehicle.description}</p>
                     <p class="text-gray-600">Seats: ${data.data[i].vehicle.seats[0].count}</p>
                   </div>`
                 );
                 cardLanding.append(transferCard);
               }
-
-              resolve(data);
-
+              
               // Add an event listener to each transfer card
               cardLanding.on('click', '.card-offers', function () {
                 const selectedIndex = $(this).index();
                 const selectedTransfer = data.data[selectedIndex];
-
+                
                 // Save the selected transfer in local storage
                 localStorage.setItem('selectedTransfer', JSON.stringify(selectedTransfer));
               });
+
+              resolve(data);
             })
             .catch((error) => {
               console.error('Error retrieving flight price offers:', error);
@@ -164,37 +158,11 @@ async function searchTransferOffers() {
   });
 }
 
-// function testytesty() {
-//   console.log(transferDestination);
-//   console.log(typeof transferDestination.addressLine);
-//   console.log(typeof transferDestination.cityName);
-//   console.log(typeof transferDestination.zipCode);
-//   console.log(typeof transferDestination.countryCode);
-//   console.log(typeof transferDestination.geocode);
-//   console.log(transferDestination.addressLine);
-//   console.log(transferDestination.cityName);
-//   console.log(transferDestination.zipCode);
-//   console.log(transferDestination.countryCode);
-//   console.log(transferDestination.geocode);
-// }
-
-// function testAll() {
-//   try {
-//     convertCoords()
-//   } finally {
-//     searchTransferOffers(transferDestination)
-//   }
-// }
-
-
-// $('#test-locator').on('click', convertCoords);
-// $('#test-transfer').on('click', searchTransferOffers);
-
-function goBack() {
+// Initiate first step on page load
+document.addEventListener('DOMContentLoaded', getInputs);
+// Clear any messages and go back to the index.html page
+$('#go-back').on('click', function () {
+  waitMsg.text('');
+  errMsg.text('');
   window.location.href = 'index.html';
-}
-
-// $('#test-all').on('click', convertCoords);
-document.addEventListener('DOMContentLoaded', convertCoords);
-// Go back to the index.html page
-$('#go-back').on('click', goBack);
+});
