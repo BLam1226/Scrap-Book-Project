@@ -53,32 +53,35 @@
 
 
     </form>
-    <button
-      class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
-      id="flightPage" href="flight.html">
-      Flight Search
-    </button>
-    <button
-      class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
-      onclick="window.location.href = 'restaurants.html'">
-      Find Nearby Restaurants
-    </button>
-    <button
-      class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
-      onclick="window.location.href = 'hotel.html'">
-      Find Nearby Hotels
-    </button>
-    <button
-      class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
-      onclick="window.location.href = 'transfer.html'">
-      Find Hotel Shuttle
-    </button>
+    <div id="result"></div>
+
+    <div>
+      <button
+        class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
+        id="flightPage" href="flight.html">
+        Flight Search
+      </button>
+      <button
+        class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
+        id="hotelPage" onclick="window.location.href = 'hotel.html'">
+        Find Nearby Hotels
+      </button>
+      <button
+        class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
+        id="transferPage" onclick="window.location.href = 'transfer.html'">
+        Find Hotel Shuttle
+      </button>
+      <button
+        class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
+        id="restaurantsPage" onclick="window.location.href = 'restaurants.html'">
+        Find Nearby Restaurants
+      </button>
+    </div>
     <button
       class="pink-background text-white font-bold py-2 px-4 my-4 rounded focus:outline-none focus:shadow-outline"
       id="clear">
       Clear Search History
     </button>
-    <div id="result"></div>
     <!-- Added airplane taking off image -->
     <div class="flex justify-center">
       <!-- <img src="./assets/images/plane-take-off-feat.jpg" alt="airplane taking off" class="max-w-full" /> -->
