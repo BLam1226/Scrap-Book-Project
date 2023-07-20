@@ -181,7 +181,7 @@ const flightPage = document.getElementById('flightPage');
 flightPage.addEventListener('click', nextPage);
 
 const clearSearch = document.getElementById('clear');
-clearSearch.addEventListener('click', function() {
+clearSearch.addEventListener('click', function () {
     localStorage.clear();
 })
 
@@ -189,12 +189,12 @@ clearSearch.addEventListener('click', function() {
 function displaySavedFlight() {
     // Retrieve the saved flight data from local storage
     const savedFlight = JSON.parse(localStorage.getItem('selectedFlight'));
-  
+
     // Get the container div where you want to display the saved flight details
     const savedFlightContainer = document.getElementById('savedFlightContainer');
-  
+
     if (savedFlight) {
-      savedFlightContainer.innerHTML = `
+        savedFlightContainer.innerHTML = `
         <div class="card-offers my-4 p-4 border border-black rounded shadow">
           <p class="text-lg font-semibold">Price: ${savedFlight.price.total} USD</p>
           <p class="text-gray-600">Airline: ${savedFlight.itineraries[0].segments[0].carrierCode}</p>
@@ -203,33 +203,33 @@ function displaySavedFlight() {
         </div>
       `;
     }
-  }
-  
-  // Call the displaySavedFlight function on page load
-  document.addEventListener('DOMContentLoaded', displaySavedFlight);
-  
-  // Function to display the saved restaurant on index.html
-  function displaySavedRestaurant() {
+}
+
+// Call the displaySavedFlight function on page load
+document.addEventListener('DOMContentLoaded', displaySavedFlight);
+
+// Function to display the saved restaurant on index.html
+function displaySavedRestaurant() {
     // Retrieve the saved restaurant data from local storage
     const savedRestaurant = JSON.parse(localStorage.getItem('selectedRestaurant'));
-  
+
     // Get the container div where you want to display the saved restaurant details
     const savedRestaurantContainer = document.getElementById('savedRestaurantContainer');
-  
+
     if (savedRestaurant) {
-      savedRestaurantContainer.innerHTML = `
+        savedRestaurantContainer.innerHTML = `
         <div class="card-offers my-4 p-4 border border-black rounded shadow">
           <h2 class="underline text-2xl bold">${savedRestaurant.name}</h2>
           <p>Address: ${savedRestaurant.address}</p>
         </div>
       `;
     }
-  }
-  
-  // Call the displaySavedRestaurant function on page load
-  document.addEventListener('DOMContentLoaded', displaySavedRestaurant);
-  
-  function displaySavedHotel() {
+}
+
+// Call the displaySavedRestaurant function on page load
+document.addEventListener('DOMContentLoaded', displaySavedRestaurant);
+
+function displaySavedHotel() {
     // Retrieve the saved hotel data from local storage
     const savedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
 
@@ -249,3 +249,25 @@ function displaySavedFlight() {
 
 // Call the displaySavedHotel function on page load
 document.addEventListener('DOMContentLoaded', displaySavedHotel);
+
+function displaySavedTransfer() {
+    // Retrieve the saved transfer data from local storage
+    const savedTransfer = JSON.parse(localStorage.getItem('selectedTransfer'));
+
+    // Get the container div where you want to display the saved transfer details
+    const savedTransferContainer = document.getElementById('savedTransferContainer');
+
+    if (savedTransfer) {
+        savedTransferContainer.innerHTML = `
+        <div class="card-offers my-4 p-4 border border-black rounded shadow">
+          <p class="text-lg font-semibold">Quote: ${savedTransfer.converted.monetaryAmount} USD</p>
+          <p class="text-gray-600">Service Provider: ${savedTransfer.serviceProvider.name.match(/[A-Z][a-z]+/g).join(" ")}</p>
+          <p class="text-gray-600">Vehicle: ${savedTransfer.vehicle.description}</p>
+          <p class="text-gray-600">Seats: ${savedTransfer.vehicle.seats[0].count}</p>
+        </div>
+      `;
+    }
+}
+
+// Call the displaySavedTransfer function on page load
+document.addEventListener('DOMContentLoaded', displaySavedTransfer);
