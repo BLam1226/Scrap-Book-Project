@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((response) => response.json())
         .then((data) => {
             const accessToken = data.access_token;
-            localStorage.setItem("data", JSON.stringify(data));
             console.log(data);
             const amadeusEndpoint =
                 `https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-geocode?latitude=${destinationLocation.lat}&longitude=${destinationLocation.lng}&radius=5&radiusUnit=MILE&ratings=2&hotelSource=ALL`;
