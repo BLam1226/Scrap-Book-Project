@@ -184,3 +184,27 @@ const clearSearch = document.getElementById('clear');
 clearSearch.addEventListener('click', function() {
     localStorage.clear();
 })
+
+// Function to display the saved flight ticket on index.html
+function displaySavedFlight() {
+    // Retrieve the saved flight data from local storage
+    const savedFlight = JSON.parse(localStorage.getItem('selectedFlight'));
+  
+    // Get the container div where you want to display the saved flight details
+    const savedFlightContainer = document.getElementById('savedFlightContainer');
+  
+    if (savedFlight) {
+      savedFlightContainer.innerHTML = `
+        <div class="card-offers my-4 p-4 border border-black rounded shadow">
+          <p class="text-lg font-semibold">Price: ${savedFlight.price.total} USD</p>
+          <p class="text-gray-600">Airline: ${savedFlight.itineraries[0].segments[0].carrierCode}</p>
+          <p class="text-gray-600">Departure Terminal: ${savedFlight.itineraries[0].segments[0].departure.terminal}</p>
+          <p class="text-gray-600">Arrival Terminal: ${savedFlight.itineraries[0].segments[savedFlight.itineraries[0].segments.length - 1].arrival.terminal}</p>
+        </div>
+      `;
+    }
+  }
+  
+  // Call the displaySavedFlight function on page load
+  document.addEventListener('DOMContentLoaded', displaySavedFlight);
+  
