@@ -1,41 +1,30 @@
-// Testy
-// Boogie Woogie Woogie
+// Variables
+// TODO Add/edit notations for each step/section of code
 var cardLanding = $('#card-landing');
 
 // TODO Make page load conditional on localStorage vars
 var transferTime = localStorage.getItem('departureDate') + 'T11:00:00';
-// '2023-11-11T11:00:00';
 var airportLocn = localStorage.getItem('destinationIataCode');
-// 'PHL';
-// var hotelLocn = { lat: 39.954788, lng: -75.158859 };
 var selectedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
-var transferDestination
-
 var hotelLat = selectedHotel.geoCode.latitude;
 var hotelLng = selectedHotel.geoCode.longitude;
+var transferDestination
+
 
 console.log('page load');
 console.log(selectedHotel);
-console.log(selectedHotel.geoCode);
-console.log(selectedHotel.geoCode.latitude);
-console.log(selectedHotel.geoCode.longitude);
 
 
 async function convertCoords() {
   var googleKey = 'AIzaSyAdF7nQLNAAGL0HVRqeTJ0jPfrn9l-IgPg';
   var latlng = hotelLat + "," + hotelLng;
-  // hotelLocn.lat + "," + hotelLocn.lng;
+
   console.log('convert function called');
 
   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&location_type=ROOFTOP&result_type=street_address&key=${googleKey}`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data.results[0].address_components);
-      console.log('city: ' + data.results[0].address_components[3].long_name);
-      console.log('street #: ' + data.results[0].address_components[0].long_name);
-      console.log('street name: ' + data.results[0].address_components[1].long_name);
-      console.log('zip: ' + data.results[0].address_components[7].long_name);
-      console.log('country: ' + data.results[0].address_components[6].short_name);
 
       var streetNumber = data.results[0].address_components[0].long_name;
       var streetName = data.results[0].address_components[1].long_name;
@@ -47,18 +36,16 @@ async function convertCoords() {
         countryCode: data.results[0].address_components[6].short_name,
         geoCode: latlng,
       }
-      // testytesty();
       searchTransferOffers();
     })
 }
 
 
-// Function to search for flight price offers using the Amadeus API
+// TODO Function to search for flight price offers using the Amadeus API
 async function searchTransferOffers() {
   console.log('transfer function called');
-  // testytesty();
 
-  // Use the Amadeus Flight Offers Search API to get flight price offers
+  // TODO Use the Amadeus Flight Offers Search API to get flight price offers
   const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
   const clientSecret = 'FFRrmi8ZhebdbYXw';
   var waitMsg = $('#wait-msg');
@@ -89,19 +76,9 @@ async function searchTransferOffers() {
             "transferType": "PRIVATE",
             "startDateTime": `${transferTime}`,
             "currency": "USD",
-
-            // "startLocationCode": 'PHL',
-            // "endAddressLine": "Race Street, 1120",
-            // "endCityName": "Philadelphia",
-            // "endZipCode": "19107",
-            // "endCountryCode": "US",
-            // "endGeoCode": "39.954788,-75.158859",
-            // "transferType": "PRIVATE",
-            // "startDateTime": "2023-11-10T10:30:00",
-            // "currency": "USD",
           }
 
-          // Use the access token to fetch flight price offers
+          // Use the access token to fetch transfer offers
           return fetch(amadeusEndpoint, {
             method: 'POST',
             headers: {
@@ -115,13 +92,6 @@ async function searchTransferOffers() {
               console.log('transfer function resolves');
               waitMsg.text('');
               console.log(data);
-              // console.log('Provider String: ' + data.data[0].serviceProvider.name);
-              // console.log('Provider Name: ' + data.data[0].serviceProvider.name.match(/[A-Z][a-z]+/g).join(" "));
-              // console.log('Provider Logo: ' + data.data[0].serviceProvider.logoURL);
-              // console.log('Quote: $' + data.data[0].converted.monetaryAmount);
-              // console.log('Vehicle Desc: ' + data.data[0].vehicle.description);
-              // console.log('Seats: ' + data.data[0].vehicle.seats[0].count);
-              // console.log('Picture: ' + data.data[0].vehicle.imageURL);
 
               var offersList = data.data.length
               if (offersList > 20) {
@@ -155,37 +125,9 @@ async function searchTransferOffers() {
   });
 }
 
-// function testytesty() {
-//   console.log(transferDestination);
-//   console.log(typeof transferDestination.addressLine);
-//   console.log(typeof transferDestination.cityName);
-//   console.log(typeof transferDestination.zipCode);
-//   console.log(typeof transferDestination.countryCode);
-//   console.log(typeof transferDestination.geocode);
-//   console.log(transferDestination.addressLine);
-//   console.log(transferDestination.cityName);
-//   console.log(transferDestination.zipCode);
-//   console.log(transferDestination.countryCode);
-//   console.log(transferDestination.geocode);
-// }
 
-// function testAll() {
-//   try {
-//     convertCoords()
-//   } finally {
-//     searchTransferOffers(transferDestination)
-//   }
-// }
-
-
-// $('#test-locator').on('click', convertCoords);
-// $('#test-transfer').on('click', searchTransferOffers);
-
-function goBack() {
-  window.location.href = 'index.html';
-}
-
-// $('#test-all').on('click', convertCoords);
 document.addEventListener('DOMContentLoaded', convertCoords);
 // Go back to the index.html page
-$('#go-back').on('click', goBack);
+$('#go-back').on('click', function() {
+  window.location.href = 'index.html';
+});
