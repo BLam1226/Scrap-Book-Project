@@ -208,3 +208,44 @@ function displaySavedFlight() {
   // Call the displaySavedFlight function on page load
   document.addEventListener('DOMContentLoaded', displaySavedFlight);
   
+  // Function to display the saved restaurant on index.html
+  function displaySavedRestaurant() {
+    // Retrieve the saved restaurant data from local storage
+    const savedRestaurant = JSON.parse(localStorage.getItem('selectedRestaurant'));
+  
+    // Get the container div where you want to display the saved restaurant details
+    const savedRestaurantContainer = document.getElementById('savedRestaurantContainer');
+  
+    if (savedRestaurant) {
+      savedRestaurantContainer.innerHTML = `
+        <div class="card-offers my-4 p-4 border border-black rounded shadow">
+          <h2 class="underline text-2xl bold">${savedRestaurant.name}</h2>
+          <p>Address: ${savedRestaurant.address}</p>
+        </div>
+      `;
+    }
+  }
+  
+  // Call the displaySavedRestaurant function on page load
+  document.addEventListener('DOMContentLoaded', displaySavedRestaurant);
+  
+  function displaySavedHotel() {
+    // Retrieve the saved hotel data from local storage
+    const savedHotel = JSON.parse(localStorage.getItem('selectedHotel'));
+
+    // Get the container div where you want to display the saved hotel details
+    const savedHotelContainer = document.getElementById('savedHotelContainer');
+
+    if (savedHotel) {
+        savedHotelContainer.innerHTML = `
+            <div class="card-offers my-4 p-4 border border-black rounded shadow">
+                <h2 class="underline text-2xl bold">${savedHotel.name}</h2>
+                <p>Rating: ${savedHotel.rating} stars</p>
+                <p>Distance: ${savedHotel.distance.value} miles away</p>
+            </div>
+        `;
+    }
+}
+
+// Call the displaySavedHotel function on page load
+document.addEventListener('DOMContentLoaded', displaySavedHotel);
