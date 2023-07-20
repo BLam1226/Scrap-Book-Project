@@ -9,15 +9,27 @@
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
-<body>
-    <!-- Add your HTML content here -->
-    <h1 class="underline text-3xl bold">Nearby Restaurants</h1>
+<!-- Add your HTML content here -->
+<!-- <h1 class="underline text-3xl bold">Nearby Restaurants</h1>
 
-    <div id="restaurantList"></div>
+    <div id="restaurantList"></div> -->
+
+<body class="altPage">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4 text-center">
+            <span class="pink-background text-white border-4 py-2 px-4 inline-block shadow bg-gray-300">
+                Nearby Restaurants
+            </span>
+        </h1>
+        <div id="restaurantList"></div>
+    </div>
+
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNR24Q47xxypa3tPgNpbXizQZgDCr7TO8&libraries=places&callback=initMap" async defer></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNR24Q47xxypa3tPgNpbXizQZgDCr7TO8&libraries=places&callback=initMap"
+        async defer></script>
     <script src="./assets/js/restaurants.js"></script>
 </body>
 
