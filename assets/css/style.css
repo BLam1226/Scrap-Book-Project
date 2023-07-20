@@ -3,7 +3,7 @@ body {
 }
 
 .mainPage {
-    background-image: url(file:///C:/Users/kell6/Downloads/airplane-sky-flight-clouds-sunset-4k_1541114592.jpg);
+    /* background-image: url(file:///C:/Users/kell6/Downloads/airplane-sky-flight-clouds-sunset-4k_1541114592.jpg); */
     background-size: 100%;
 }
 
@@ -16,8 +16,8 @@ body {
 }
 
 .savedCards {
-    width: 30%;
-    margin-left: 65%;
+    /* width: 30%; */
+    /* margin-left: 65%; */
 }
 
 img.max-w-full {
