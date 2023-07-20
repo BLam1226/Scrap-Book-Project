@@ -1,6 +1,5 @@
 // Initialize the Google Maps API
 function initMap() {
-    // Add your Google Maps API code here (if needed)
 }
 
 // Function to handle form submission
@@ -60,15 +59,15 @@ function processLocationData(currentLocation, destination, departureDate) {
 
                 // Display the result on the page
                 const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = `
-                    <p>Current Location:</p>
-                    <p>Latitude: ${currentLocation.lat}</p>
-                    <p>Longitude: ${currentLocation.lng}</p>
-                    <p>Destination: ${destination}</p>
-                    <p>Destination Latitude: ${destinationLocation.lat}</p>
-                    <p>Destination Longitude: ${destinationLocation.lng}</p>
-                    <p>Departure Date: ${departureDate}</p>
-                `;
+                // resultDiv.innerHTML = `
+                //     <p>Current Location:</p>
+                //     <p>Latitude: ${currentLocation.lat}</p>
+                //     <p>Longitude: ${currentLocation.lng}</p>
+                //     <p>Destination: ${destination}</p>
+                //     <p>Destination Latitude: ${destinationLocation.lat}</p>
+                //     <p>Destination Longitude: ${destinationLocation.lng}</p>
+                //     <p>Departure Date: ${departureDate}</p>
+                // `;
 
                 // Use the Amadeus Location API to get IATA code for current location
                 const clientId = 'QsDw1NAA1de307vqAoMrpVSAEGHbRR3h';
@@ -85,51 +84,66 @@ function processLocationData(currentLocation, destination, departureDate) {
                     .then(response => response.json())
                     .then(data => {
                         const accessToken = data.access_token;
-                        const amadeusEndpointCurrent = `https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}&radius=50&page[limit]=1`;
+                        const amadeusEndpointCurrent = `https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}&radius=500&page[limit]=10`;
 
-                        // Use the access token to fetch the IATA code for current location
-                        fetch(amadeusEndpointCurrent, {
-                            headers: {
-                                Authorization: `Bearer ${accessToken}`
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.data.length > 0) {
-                                    const currentIataCode = data.data[0].iataCode;
-                                    resultDiv.innerHTML += `<p>Current Location IATA Code: ${currentIataCode}</p>`;
-
-                                    // Save current location IATA code in local storage
-                                    localStorage.setItem('currentIataCode', currentIataCode);
-                                } else {
-                                    console.error('No airport found near the current location.');
+                        setTimeout(function () {
+                            // Use the access token to fetch the IATA codes for current location
+                            fetch(amadeusEndpointCurrent, {
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`
                                 }
                             })
-                            .catch(error => {
-                                console.error('Error retrieving current location IATA code:', error);
-                            });
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.data.length > 0) {
+                                        const iataCodes = data.data.map(airport => airport.iataCode);
+                                        const selectOptions = iataCodes.map(iataCode => `<option value="${iataCode}">${iataCode}</option>`).join('');
+                                        resultDiv.innerHTML += `
+                                        <p>Select Which Airport You Would Like To Use:</p>
+                                        <select id="currentIataCodeSelect">
+                                            ${selectOptions}
+                                        </select>
+                                    `;
+
+                                        // Add event listener to the select element
+                                        const currentIataCodeSelect = document.getElementById('currentIataCodeSelect');
+                                        currentIataCodeSelect.addEventListener('change', function () {
+                                            const selectedIataCode = currentIataCodeSelect.value;
+                                            // Save selected IATA code in local storage
+                                            localStorage.setItem('currentIataCode', selectedIataCode);
+                                        });
+                                    } else {
+                                        console.error('No airports found near the current location.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error retrieving current location IATA codes:', error);
+                                });
+                        }, 100); // Add a 100ms timeout here
 
                         // Use the access token to fetch the IATA code for destination
-                        fetch(`https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=${destinationLocation.lat}&longitude=${destinationLocation.lng}&radius=50&page[limit]=1`, {
-                            headers: {
-                                Authorization: `Bearer ${accessToken}`
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.data.length > 0) {
-                                    const destinationIataCode = data.data[0].iataCode;
-                                    resultDiv.innerHTML += `<p>Destination IATA Code: ${destinationIataCode}</p>`;
-
-                                    // Save destination location IATA code in local storage
-                                    localStorage.setItem('destinationIataCode', destinationIataCode);
-                                } else {
-                                    console.error('No airport found near the destination location.');
+                        setTimeout(function () {
+                            fetch(`https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=${destinationLocation.lat}&longitude=${destinationLocation.lng}&radius=50&page[limit]=1`, {
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`
                                 }
                             })
-                            .catch(error => {
-                                console.error('Error retrieving destination location IATA code:', error);
-                            });
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.data.length > 0) {
+                                        const destinationIataCode = data.data[0].iataCode;
+                                        // resultDiv.innerHTML += `<p>Destination IATA Code: ${destinationIataCode}</p>`;
+
+                                        // Save destination location IATA code in local storage
+                                        localStorage.setItem('destinationIataCode', destinationIataCode);
+                                    } else {
+                                        console.error('No airport found near the destination location.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error retrieving destination location IATA code:', error);
+                                });
+                        }, 100); // Add a 100ms timeout here
                     })
                     .catch(error => {
                         console.error('Error retrieving access token:', error);
@@ -148,10 +162,49 @@ const locationForm = document.getElementById('locationForm');
 locationForm.addEventListener('submit', handleFormSubmission);
 
 function nextPage() {
-    window.location.href = 'flight.html'
+    if (
+        localStorage.getItem('currentLocation') &&
+        localStorage.getItem('destination') &&
+        localStorage.getItem('departureDate') &&
+        localStorage.getItem('destinationLocation') &&
+        localStorage.getItem('currentIataCode') &&
+        localStorage.getItem('destinationIataCode')
+    ) {
+        window.location.href = 'flight.html';
+    } else {
+        alert('Please fill in all the required information before proceeding.');
+    }
 }
+
 // Redirect to the flight.html page
 const flightPage = document.getElementById('flightPage');
 flightPage.addEventListener('click', nextPage);
 
+const clearSearch = document.getElementById('clear');
+clearSearch.addEventListener('click', function() {
+    localStorage.clear();
+})
 
+// Function to display the saved flight ticket on index.html
+function displaySavedFlight() {
+    // Retrieve the saved flight data from local storage
+    const savedFlight = JSON.parse(localStorage.getItem('selectedFlight'));
+  
+    // Get the container div where you want to display the saved flight details
+    const savedFlightContainer = document.getElementById('savedFlightContainer');
+  
+    if (savedFlight) {
+      savedFlightContainer.innerHTML = `
+        <div class="card-offers my-4 p-4 border border-black rounded shadow">
+          <p class="text-lg font-semibold">Price: ${savedFlight.price.total} USD</p>
+          <p class="text-gray-600">Airline: ${savedFlight.itineraries[0].segments[0].carrierCode}</p>
+          <p class="text-gray-600">Departure Terminal: ${savedFlight.itineraries[0].segments[0].departure.terminal}</p>
+          <p class="text-gray-600">Arrival Terminal: ${savedFlight.itineraries[0].segments[savedFlight.itineraries[0].segments.length - 1].arrival.terminal}</p>
+        </div>
+      `;
+    }
+  }
+  
+  // Call the displaySavedFlight function on page load
+  document.addEventListener('DOMContentLoaded', displaySavedFlight);
+  

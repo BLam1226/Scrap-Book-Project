@@ -1,9 +1,9 @@
-//   // Use the Amadeus Flight Offers Search API to get flight price offers
+//   // Use the Amadeus Hotel List Search API to get flight price offers
 document.addEventListener("DOMContentLoaded", function () {
   const clientId = "FCuoJwPQQVX99CewAG2cVyhpulqlG0dR";
   const clientSecret = "1Yzt1oz9AAsOW4yn";
 
-  // Obtain an access token
+  // Obtain the access token
   fetch("https://test.api.amadeus.com/v1/security/oauth2/token", {
     method: "POST",
     headers: {

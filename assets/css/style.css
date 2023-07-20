@@ -1,0 +1,23 @@
+body {
+    background-color: rgb(195, 228, 249);
+}
+
+/* Define custom violet color */
+.text-violet {
+    color: rgb(230, 11, 230);
+}
+
+.text-violet-font {
+    font-family: cursive;
+}
+
+.card-offers {
+    background-color: bisque;
+}
+
+img.max-w-full {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+}
