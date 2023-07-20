@@ -27,6 +27,7 @@ function createHotelCard(hotel) {
     card.addEventListener('click', () => {
         localStorage.setItem('selectedHotel', JSON.stringify(hotel));
         transferButton.classList.remove('hidden');
+        alert("Hotel Selected");
     });
 
     return card;

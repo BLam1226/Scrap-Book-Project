@@ -176,6 +176,7 @@ function processFlightPriceOffers(data) {
         const selectedIndex = event.target.dataset.index;
         // Save the selected flight ticket to local storage
         saveSelectedFlightToLocalStorage(data.data[selectedIndex]);
+        alert("Flight Ticket Selected");
         // Reveal hotel button on flight selection
         hotelButton.classList.remove("hidden");
       });
