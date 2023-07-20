@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formattedLocation: formattedLocation
     };
     localStorage.setItem('selectedRestaurant', JSON.stringify(selectedRestaurant));
+    alert("Restaurant Selected");
   };
 
   // Use the access token to fetch nearby restaurants with a timeout

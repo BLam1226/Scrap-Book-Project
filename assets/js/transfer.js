@@ -143,7 +143,7 @@ async function searchTransferOffers() {
                 
                 // Save the selected transfer in local storage
                 localStorage.setItem('selectedTransfer', JSON.stringify(selectedTransfer));
-
+                alert("Transportation Selected");
                 // Reveal Restaurants Button
                 $('#go-restaurants').removeClass('hidden');
               });
