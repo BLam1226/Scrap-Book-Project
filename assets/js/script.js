@@ -197,7 +197,7 @@ flightPage.addEventListener('click', nextPage);
 const clearSearch = document.getElementById('clear');
 clearSearch.addEventListener('click', function () {
     localStorage.clear();
-    document.location.reload();
+    window.location.reload();
 })
 
 // Function to display the saved flight ticket on index.html
@@ -218,6 +218,11 @@ function displaySavedFlight() {
           <p class="text-gray-600">Arrival Terminal: ${savedFlight.itineraries[0].segments[savedFlight.itineraries[0].segments.length - 1].arrival.terminal}</p>
         </div>
       `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 
@@ -239,6 +244,11 @@ function displaySavedRestaurant() {
           <p>Address: ${savedRestaurant.address}</p>
         </div>
       `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 
@@ -260,6 +270,11 @@ function displaySavedHotel() {
                 <p>Distance: ${savedHotel.distance.value} miles away</p>
             </div>
         `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 
@@ -282,6 +297,11 @@ function displaySavedTransfer() {
           <p class="text-gray-600">Seats: ${savedTransfer.vehicle.seats[0].count}</p>
         </div>
       `;
+        // Reveal hidden navigation buttons
+        $('#flightPage').removeClass('hidden');
+        $('#hotelPage').removeClass('hidden');
+        $('#transferPage').removeClass('hidden');
+        $('#restaurantsPage').removeClass('hidden');
     }
 }
 

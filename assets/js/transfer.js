@@ -14,6 +14,8 @@ var transferDestination;
 
 // First step, retrieve airport and hotel data from local storage
 function getInputs() {
+  // Hide Restaurants button
+  $('#go-restaurants').addClass('hidden');
   // Assign values to universal vars
   transferDate = localStorage.getItem('departureDate');
   transferTime = transferDate + 'T11:00:00';
@@ -141,6 +143,9 @@ async function searchTransferOffers() {
                 
                 // Save the selected transfer in local storage
                 localStorage.setItem('selectedTransfer', JSON.stringify(selectedTransfer));
+
+                // Reveal Restaurants Button
+                $('#go-restaurants').removeClass('hidden');
               });
 
               resolve(data);
@@ -165,4 +170,10 @@ $('#go-back').on('click', function () {
   waitMsg.text('');
   errMsg.text('');
   window.location.href = 'index.html';
+});
+// Clear any messages and proceed to the restaurants.html page
+$('#go-restaurants').on('click', function () {
+  waitMsg.text('');
+  errMsg.text('');
+  window.location.href = 'restaurants.html';
 });
