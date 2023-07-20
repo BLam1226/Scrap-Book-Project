@@ -29,6 +29,8 @@ N/A
 ### Usage
 
 Enter a City into the input form and allow Google Maps API to retrieve your current location data to search for nearby airports using the Amadeus API. You can choose from a list of the nearby airports to search for flight offers to your destination along with restaurants, hotels, and transportation to your hotel.
+WebPage URL: https://blam1226.github.io/Travel-Planner/index.html 
+![Screenshot 2023-07-20 182931](https://github.com/BLam1226/Travel-Planner/assets/127125695/913b720e-2551-4f06-8985-7ea0132d86cf)
 
 ### Credits
 
