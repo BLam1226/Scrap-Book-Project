@@ -3,10 +3,6 @@ function initMap() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (performance.navigation.type === 1) {
-    window.location.reload();
-  }
-
   // Retrieve the necessary data from localStorage
   const destinationLocation = JSON.parse(localStorage.getItem('destinationLocation'));
 
@@ -36,9 +32,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100); // 100-millisecond timeout
   });
   // Function to handle restaurant selection
-  const handleRestaurantSelection = (restaurant) => {
-    // Save the selected restaurant to local storage
-    localStorage.setItem('selectedRestaurant', JSON.stringify(restaurant));
+  const handleRestaurantSelection = (event) => {
+    const restaurantDiv = event.target.closest('.restaurant');
+
+    if (!restaurantDiv) {
+      return; // If the click did not occur on a restaurant div, exit the function
+    }
+
+    // Retrieve the formatted location from the clicked restaurant's HTML
+    const formattedLocation = restaurantDiv.querySelector('.formatted-location').textContent;
+
+    // Save the selected restaurant and formatted location to local storage
+    const selectedRestaurant = {
+      name: restaurantDiv.querySelector('.restaurant-name').textContent,
+      address: restaurantDiv.querySelector('.restaurant-address').textContent,
+      formattedLocation: formattedLocation
+    };
+    localStorage.setItem('selectedRestaurant', JSON.stringify(selectedRestaurant));
   };
 
   // Use the access token to fetch nearby restaurants with a timeout
@@ -78,18 +88,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const formattedLocation = `${location.lat()}, ${location.lng()}`;
 
                     const restaurantDiv = document.createElement('div');
+                    restaurantDiv.classList.add('restaurant'); // Add class name for event delegation
                     restaurantDiv.innerHTML = `
-                        <div class="card-offers my-4 p-4 border border-black rounded shadow">
-                          <h2 class="underline text-2xl bold">${name}</h2>
-                          <p>Address: ${address}</p>
-                          <p>Formatted Location: ${formattedLocation}</p>
-                        </div>
-                      `;
+  <div class="card-offers my-4 p-4 border border-black rounded shadow">
+    <h2 class="underline text-2xl bold restaurant-name">${name}</h2>
+    <p class="restaurant-address">Address: ${address}</p>
+    <p class="formatted-location">Formatted Location: ${formattedLocation}</p>
+  </div>
+`;
+
                     restaurantList.appendChild(restaurantDiv);
-                    // Add event listener to handle restaurant selection
-                    restaurantDiv.addEventListener('click', () => {
-                      handleRestaurantSelection(restaurant);
-                    });
+                    // Add event listener to handle restaurant selection on the restaurantList element
+                    restaurantList.addEventListener('click', handleRestaurantSelection);
                   } else {
                     console.error(`No results found for search query: ${searchQuery}`);
                   }
